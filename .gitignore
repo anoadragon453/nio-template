@@ -1,0 +1,13 @@
+# PyCharm
+.idea/
+
+# Python virtualenv environment folders
+env/
+env3/
+.env/
+
+# Bot local files
+*.db
+
+# Python
+__pycache__/

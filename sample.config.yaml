@@ -1,0 +1,37 @@
+# Welcome to the sample config file
+# Below you will find various config sections and options
+# Default values are shown
+
+# The string to prefix messages with to talk to the bot in group chats
+command_prefix: "!c"
+
+# Options for connecting to the bot's Matrix account
+matrix:
+  # The Matrix User ID of the bot account
+  user_id: "@bot:example.com"
+  # The access token of the bot account
+  access_token: ""
+  # The device ID given on login
+  device_id: ABCDEFGHIJ
+  # The URL of the homeserver to connect to
+  homeserver_url: https://example.com
+
+database:
+  # The path to the database
+  filepath: "bot.db"
+
+# Logging setup
+logging:
+  # Logging level
+  # Allowed levels are 'INFO', 'WARNING', 'ERROR', 'DEBUG' where DEBUG is most verbose
+  level: INFO
+  # Configure logging to a file
+  file_logging:
+    # Whether logging to a file is enabled
+    enabled: false
+    # The path to the file to log to. May be relative or absolute
+    filepath: bot.log
+  # Configure logging to the console output
+  console_logging:
+    # Whether logging to the console is enabled
+    enabled: true
