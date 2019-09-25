@@ -1,8 +1,10 @@
 import sqlite3
 import os.path
+import logging
 
 latest_db_version = 0
 
+logger = logging.getLogger(__name__)
 
 class Storage(object):
     def __init__(self, db_path):
@@ -24,7 +26,7 @@ class Storage(object):
 
     def _initial_setup(self):
         """Initial setup of the database"""
-        print("Performing initial setup")
+        logger.info("Performing initial database setup...")
 
         # Initialize a connection to the database
         conn = sqlite3.connect(self.db_path)
@@ -35,13 +37,14 @@ class Storage(object):
                             "token TEXT PRIMARY KEY"
                             ")")
 
+        logger.info("Database setup complete")
+
     def _run_migrations(self):
         """Execute database migrations"""
         # Initialize a connection to the database
         conn = sqlite3.connect(self.db_path)
         self.cursor = conn.cursor()
 
-        print("Running migration")
         pass
 
     def get_sync_token(self):
