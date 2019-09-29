@@ -7,6 +7,7 @@ from nio import (
     AsyncClientConfig,
     RoomMessageText,
     InviteEvent,
+    SyncError,
 )
 from callbacks import Callbacks
 from config import Config
@@ -51,6 +52,11 @@ async def main():
     while True:
         # Sync with the server
         sync_response = await client.sync(timeout=30000, full_state=True, since=token)
+
+        # Check if the sync had an error
+        if type(sync_response) == SyncError:
+            logger.warning("Error in client sync: %s", sync_response.message)
+            continue
 
         # Save the latest sync token
         token = sync_response.next_batch
