@@ -5,6 +5,13 @@ A template for creating bots with
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
+## Projects using nio-template
+
+* [anoadragon453/msc-chatbot](https://github.com/anoadragon453/msc-chatbot) - A matrix bot for matrix spec proposals
+
+Want your project listed here? [Edit this
+doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
+
 ## Project structure
 
 ### `main.py`
