@@ -29,8 +29,8 @@ class Storage(object):
         logger.info("Performing initial database setup...")
 
         # Initialize a connection to the database
-        conn = sqlite3.connect(self.db_path)
-        self.cursor = conn.cursor()
+        self.conn = sqlite3.connect(self.db_path)
+        self.cursor = self.conn.cursor()
 
         # Sync token table
         self.cursor.execute("CREATE TABLE sync_token ("
@@ -42,10 +42,8 @@ class Storage(object):
     def _run_migrations(self):
         """Execute database migrations"""
         # Initialize a connection to the database
-        conn = sqlite3.connect(self.db_path)
-        self.cursor = conn.cursor()
-
-        pass
+        self.conn = sqlite3.connect(self.db_path)
+        self.cursor = self.conn.cursor()
 
     def get_sync_token(self):
         """Retrieve the next_batch token from the last sync response.
@@ -73,3 +71,4 @@ class Storage(object):
         """
         self.cursor.execute("INSERT OR REPLACE INTO sync_token"
                             " (token) VALUES (?)", (token,))
+        self.conn.commit()
