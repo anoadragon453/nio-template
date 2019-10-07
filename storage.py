@@ -6,6 +6,7 @@ latest_db_version = 0
 
 logger = logging.getLogger(__name__)
 
+
 class Storage(object):
     def __init__(self, db_path):
         """Setup the database
@@ -34,7 +35,8 @@ class Storage(object):
 
         # Sync token table
         self.cursor.execute("CREATE TABLE sync_token ("
-                            "token TEXT PRIMARY KEY"
+                            "dedupe_id INTEGER PRIMARY KEY, "
+                            "token TEXT NOT NULL"
                             ")")
 
         logger.info("Database setup complete")
@@ -69,6 +71,6 @@ class Storage(object):
         Args:
             token (str): A next_batch token as part of a sync response
         """
-        self.cursor.execute("INSERT OR REPLACE INTO sync_token"
-                            " (token) VALUES (?)", (token,))
+        self.cursor.execute("INSERT OR REPLACE INTO sync_token "
+                            "(dedupe_id, token) VALUES (1, ?)", (token,))
         self.conn.commit()
