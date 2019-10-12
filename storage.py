@@ -6,6 +6,7 @@ latest_db_version = 0
 
 logger = logging.getLogger(__name__)
 
+
 class Storage(object):
     def __init__(self, db_path):
         """Setup the database
@@ -44,32 +45,3 @@ class Storage(object):
         # Initialize a connection to the database
         conn = sqlite3.connect(self.db_path)
         self.cursor = conn.cursor()
-
-        pass
-
-    def get_sync_token(self):
-        """Retrieve the next_batch token from the last sync response.
-
-        Used to sync without retrieving messages we've processed in the past
-
-        Returns:
-            A str containing the last sync token or None if one does not exist
-        """
-        self.cursor.execute("SELECT token FROM sync_token")
-        rows = self.cursor.fetchone()
-
-        if not rows:
-            return None
-
-        return rows[0]
-
-    def save_sync_token(self, token):
-        """Save a token from a sync response.
-
-        Can be retrieved later to sync from where we left off
-
-        Args:
-            token (str): A next_batch token as part of a sync response
-        """
-        self.cursor.execute("INSERT OR REPLACE INTO sync_token"
-                            " (token) VALUES (?)", (token,))

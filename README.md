@@ -44,9 +44,18 @@ to put or retrieve data from it. Table definitions should be specified in
 `_run_migrations`. There's currently no defined method for how migrations
 should work though.
 
-The `sync_token` table and `get_sync_token`, `save_sync_tokens` should be left
-in tact so that the bot can save its progress when syncing events from the
-homeserver.
+The `sync_token` table should be left in tact so that the bot can save its
+progress when syncing events from the homeserver.
+
+### `sync_token.py`
+
+A simple class that can load and save a sync token to/from the database.
+
+A `SyncToken` is an instance of a sync token, which is simply a string
+retrieved from a matrix homeserver when querying the `/sync` endpoint (which
+clients use to retrieve new events). It is given to the next call of the
+`/sync` endpoint in order to specify the starting point in the event timeline
+you would like to receive messages from.
 
 ### `callbacks.py`
 
