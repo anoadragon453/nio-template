@@ -18,7 +18,7 @@ class Command(object):
         """
         self.client = client
         self.store = store
-        self.command = command
+        self.command = command.split()[:1]
         self.room = room
         self.event = event
         self.args = self.command.split()[1:]

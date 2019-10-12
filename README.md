@@ -5,6 +5,9 @@ A template for creating bots with
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
+Tutorials for using this template can be found in the [tutorials](/tutorials)
+directory.
+
 ## Project structure
 
 ### `main.py`
