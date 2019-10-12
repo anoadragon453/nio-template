@@ -11,3 +11,6 @@ env3/
 
 # Python
 __pycache__/
+
+# Config file
+config.yaml
