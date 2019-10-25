@@ -1,3 +1,4 @@
+from chat_functions import send_text_to_room
 import logging
 
 logger = logging.getLogger(__name__)
@@ -30,4 +31,11 @@ class Message(object):
 
     async def process(self):
         """Process and possibly respond to the message"""
-        pass
+        if self.message_content.lower() == "hello world":
+            self._hello_world()
+
+    async def _hello_world():
+        """Say hello"""
+        text = "Hello, world!"
+        await send_text_to_room(self.client, self.room.room_id, text)
+
