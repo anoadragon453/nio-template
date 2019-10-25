@@ -20,6 +20,7 @@ class Command(object):
         """
         self.client = client
         self.store = store
+        self.config = config
         self.command = command
         self.room = room
         self.event = event
