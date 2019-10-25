@@ -30,12 +30,13 @@ class Storage(object):
         logger.info("Performing initial database setup...")
 
         # Initialize a connection to the database
-        conn = sqlite3.connect(self.db_path)
-        self.cursor = conn.cursor()
+        self.conn = sqlite3.connect(self.db_path)
+        self.cursor = self.conn.cursor()
 
         # Sync token table
         self.cursor.execute("CREATE TABLE sync_token ("
-                            "token TEXT PRIMARY KEY"
+                            "dedupe_id INTEGER PRIMARY KEY, "
+                            "token TEXT NOT NULL"
                             ")")
 
         logger.info("Database setup complete")

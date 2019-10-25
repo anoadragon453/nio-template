@@ -9,6 +9,9 @@ env3/
 # Bot local files
 *.db
 
+# Config file
+config.yaml
+
 # Python
 __pycache__/
 

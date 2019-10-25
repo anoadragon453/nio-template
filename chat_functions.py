@@ -7,7 +7,13 @@ from markdown import markdown
 logger = logging.getLogger(__name__)
 
 
-async def send_text_to_room(client, room_id, message, markdown_convert=True):
+async def send_text_to_room(
+    client,
+    room_id,
+    message,
+    notice=True,
+    markdown_convert=True
+):
     """Send text to a matrix room
 
     Args:
@@ -17,23 +23,30 @@ async def send_text_to_room(client, room_id, message, markdown_convert=True):
 
         message (str): The message content
 
+        notice (bool): Whether the message should be sent with an "m.notice" message type
+            (will not ping users)
+
         markdown_convert (bool): Whether to convert the message content to markdown.
             Defaults to true.
     """
-    formatted = message
+    # Determine whether to ping room members or not
+    msgtype = "m.notice" if notice else "m.text"
+
+    content = {
+        "msgtype": msgtype,
+        "format": "org.matrix.custom.html",
+        "body": message,
+    }
+
     if markdown_convert:
-        formatted = markdown(message)
+        content["formatted_body"] = markdown(message)
 
     try:
         await client.room_send(
             room_id,
             "m.room.message",
-            {
-                "msgtype": "m.text",
-                "format": "org.matrix.custom.html",
-                "body": message,
-                "formatted_body": formatted,
-            }
+            content,
         )
     except SendRetryError:
         logger.exception(f"Unable to send message response to {room_id}")
+

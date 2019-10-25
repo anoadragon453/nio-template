@@ -42,7 +42,7 @@ async def main():
     client.access_token = config.access_token
 
     # Set up event callbacks
-    callbacks = Callbacks(client, store, config.command_prefix)
+    callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
     client.add_event_callback(callbacks.invite, (InviteEvent,))
 

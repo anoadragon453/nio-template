@@ -2,13 +2,15 @@ from chat_functions import send_text_to_room
 
 
 class Command(object):
-    def __init__(self, client, store, command, room, event):
+    def __init__(self, client, store, config, command, room, event):
         """A command made by a user
 
         Args:
             client (nio.AsyncClient): The client to communicate to matrix with
 
             store (Storage): Bot storage
+
+            config (Config): Bot configuration parameters
 
             command (str): The command and arguments
 

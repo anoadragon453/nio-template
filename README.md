@@ -5,6 +5,13 @@ A template for creating bots with
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
+## Projects using nio-template
+
+* [anoadragon453/msc-chatbot](https://github.com/anoadragon453/msc-chatbot) - A matrix bot for matrix spec proposals
+
+Want your project listed here? [Edit this
+doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
+
 ## Project structure
 
 ### `main.py`
@@ -83,6 +90,18 @@ command from a user directed at the bot (either through the specified command
 prefix (defined by the bot's config file), or through a private message
 directly to the bot. The `process` command is then called for the bot to act on
 that command.
+
+### `message_responses.py`
+
+Where responses to messages that are posted in a room (but not necessarily
+directed at the bot) are specified. `callbacks.py` will listen for messages in
+rooms the bot is in, and upon receiving one will create a new `Message` object
+(which contains the message text, amongst other things) and calls `process()`
+on it, which can send a message to the room as it sees fit.
+
+A good example of this would be a Github bot that listens for people mentioning
+issue numbers in chat (e.g. "We should fix #123"), and the bot sending messages
+to the room immediately afterwards with the issue name and link.
 
 ### `chat_functions.py`
 
