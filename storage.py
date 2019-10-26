@@ -44,5 +44,5 @@ class Storage(object):
     def _run_migrations(self):
         """Execute database migrations"""
         # Initialize a connection to the database
-        conn = sqlite3.connect(self.db_path)
-        self.cursor = conn.cursor()
+        self.conn = sqlite3.connect(self.db_path)
+        self.cursor = self.conn.cursor()

@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 class SyncToken(object):
     """A SyncToken is an instance of a sync token, which is a token retrieved from a matrix
     homeserver. It is given to the /sync endpoint in order to specify at which point in the
@@ -24,10 +28,12 @@ class SyncToken(object):
             self.token = rows[0]
 
     def update(self, token):
-        """Update the sync token in the database
+        """Update the sync token in the database and the object
 
         Args:
             token (str): A sync token from a sync response sent by a matrix homeserver
         """
+        self.token = token
         self.store.cursor.execute("INSERT OR REPLACE INTO sync_token "
-                                  "(token) VALUES (?)", (token,))
+                                  "(dedupe_id, token) VALUES (1, ?)", (token,))
+        self.store.conn.commit()
