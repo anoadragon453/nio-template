@@ -10,6 +10,7 @@ class SyncToken(object):
             store (Storage): An object to access the storage layer
         """
         self.store = store
+        self.token = None
 
         # Attempt to load a token from the provided storage layer
         self._load()
