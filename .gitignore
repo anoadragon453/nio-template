@@ -17,3 +17,6 @@ __pycache__/
 
 # Config file
 config.yaml
+
+# Log files
+*.log
