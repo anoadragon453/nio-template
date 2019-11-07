@@ -64,7 +64,7 @@ class Config(object):
         if not self.device_id:
             logger.warning(
                 "Config option matrix.device_id is not provided, which means "
-                " encryption won't work correctly"
+                "that end-to-end encryption won't work correctly"
             )
 
         self.homeserver_url = matrix.get("homeserver_url")
