@@ -63,7 +63,7 @@ class Config(object):
         self.device_id = matrix.get("device_id")
         if not self.device_id:
             logger.warning(
-                "matrix.device_id is not provided, which means that end-to-end
+                "matrix.device_id is not provided, which means that end-to-end"
                 " encryption won't work correctly"
             )
 
