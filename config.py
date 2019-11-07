@@ -60,7 +60,12 @@ class Config(object):
         if not self.access_token:
             raise ConfigError("matrix.access_token is a required field")
 
-        self.device_id = matrix.get("device_id", "cribbage bot")
+        self.device_id = matrix.get("device_id")
+        if not self.device_id:
+            logger.warning(
+                "Config option matrix.device_id is not provided, which means "
+                "that end-to-end encryption won't work correctly"
+            )
 
         self.homeserver_url = matrix.get("homeserver_url")
         if not self.homeserver_url:
