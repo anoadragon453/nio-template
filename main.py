@@ -52,7 +52,8 @@ async def main():
     # Sync loop
     while True:
         # Sync with the server
-        sync_response = await client.sync(timeout=30000, since=sync_token.token)
+        sync_response = await client.sync(timeout=30000, full_state=True,
+                                          since=sync_token.token)
 
         # Check if the sync had an error
         if type(sync_response) == SyncError:
