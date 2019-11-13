@@ -9,6 +9,7 @@ matrix-nio can be found
 
 * [anoadragon453/msc-chatbot](https://github.com/anoadragon453/msc-chatbot) - A matrix bot for matrix spec proposals
 * [anoadragon453/matrix-episode-bot](https://github.com/anoadragon453/matrix-episode-bot) - A matrix bot to post episode links
+* [TheForcer/vision-nio](https://github.com/TheForcer/vision-nio) - A general purpose matrix chatbot
 
 Want your project listed here? [Edit this
 doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
