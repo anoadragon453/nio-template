@@ -80,9 +80,7 @@ class Config(object):
         # Sift through the the config until we reach our option
         config = self.config
         for name in path:
-            print("Name is", name)
             config = config.get(name)
-            print("Config is", config)
 
             # If at any point we don't get our expected option...
             if config is None:
