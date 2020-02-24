@@ -41,24 +41,20 @@ class Config(object):
             handler.setFormatter(formatter)
             logger.addHandler(handler)
 
-        # Database setup
-        self.database_filepath = self._get_cfg(["database", "filepath"], required=True)
+        # Storage setup
+        self.database_filepath = self._get_cfg(["storage", "database_filepath"], required=True)
+        self.store_filepath = self._get_cfg(["storage", "store_filepath"], required=True)
 
         # Matrix bot account setup
         self.user_id = self._get_cfg(["matrix", "user_id"], required=True)
         if not re.match("@.*:.*", self.user_id):
             raise ConfigError("matrix.user_id must be in the form @name:domain")
 
-        self.access_token = self._get_cfg(["matrix", "access_token"], required=True)
-
-        self.device_id = self._get_cfg(["matrix", "device_id"])
-        if not self.device_id:
-            logger.warning(
-                "Config option matrix.device_id is not provided, which means "
-                "that end-to-end encryption won't work correctly"
-            )
-
+        self.user_password = self._get_cfg(["matrix", "user_password"], required=True)
+        self.device_id = self._get_cfg(["matrix", "device_id"], required=True)
+        self.device_name = self._get_cfg(["matrix", "device_name"], default="nio-template")
         self.homeserver_url = self._get_cfg(["matrix", "homeserver_url"], required=True)
+        self.enable_encryption = self._get_cfg(["matrix", "enable_encryption"], default=False)
 
         self.command_prefix = self._get_cfg(["command_prefix"], default="!c") + " "
 
@@ -75,8 +71,6 @@ class Config(object):
             ConfigError: If required is specified and the object is not found
                 (and there is no default value provided), this error will be raised
         """
-        path_str = '.'.join(path)
-
         # Sift through the the config until we reach our option
         config = self.config
         for name in path:
@@ -86,7 +80,7 @@ class Config(object):
             if config is None:
                 # Raise an error if it was required
                 if required or not default:
-                    raise ConfigError(f"Config option {path_str} is required")
+                    raise ConfigError(f"Config option {'.'.join(path)} is required")
 
                 # or return the default value
                 return default

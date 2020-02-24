@@ -9,16 +9,27 @@ command_prefix: "!c"
 matrix:
   # The Matrix User ID of the bot account
   user_id: "@bot:example.com"
-  # The access token of the bot account
-  access_token: ""
-  # The device ID given on login
-  device_id: ABCDEFGHIJ
+  # Matrix account password
+  user_password: ""
   # The URL of the homeserver to connect to
   homeserver_url: https://example.com
+  # The device ID that is **non pre-existing** device
+  # If this device ID already exists, messages will be dropped silently in encrypted rooms
+  device_id: ABCDEFGHIJ
+  # What to name the logged in device
+  device_name: nio-template
+  # End-to-end encryption support
+  #
+  # Enabling this requires installing the matrix-nio encryption dependencies
+  # as described here: https://github.com/poljar/matrix-nio#installation
+  enable_encryption: true
 
-database:
+storage:
   # The path to the database
-  filepath: "bot.db"
+  database_filepath: "bot.db"
+  # The path to a directory for internal bot storage
+  # containing encryption keys, sync tokens, etc.
+  store_filepath: "./store"
 
 # Logging setup
 logging:

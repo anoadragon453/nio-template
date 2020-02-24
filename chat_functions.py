@@ -46,6 +46,7 @@ async def send_text_to_room(
             room_id,
             "m.room.message",
             content,
+            ignore_unverified_devices=True,
         )
     except SendRetryError:
         logger.exception(f"Unable to send message response to {room_id}")
