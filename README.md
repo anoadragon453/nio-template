@@ -31,9 +31,8 @@ client provides this token the next time it syncs (using the `since` parameter
 on the `AsyncClient.sync` method), the homeserver will only return new event
 *since* those specified by the given token.
 
-This token is saved in the database created by `storage.py` so even if the bot
-quits unexpectantly, it will continue syncing where it left off next time it
-is started.
+This token is saved and provided again automatically by using the
+`client.sync_forever(...)` method.
 
 ### `config.py`
 
@@ -52,19 +51,6 @@ to put or retrieve data from it. Table definitions should be specified in
 `_initial_setup`, and any necessary migrations should be put in
 `_run_migrations`. There's currently no defined method for how migrations
 should work though.
-
-The `sync_token` table should be left in tact so that the bot can save its
-progress when syncing events from the homeserver.
-
-### `sync_token.py`
-
-A simple class that can load and save a sync token to/from the database.
-
-A `SyncToken` is an instance of a sync token, which is simply a string
-retrieved from a matrix homeserver when querying the `/sync` endpoint (which
-clients use to retrieve new events). It is given to the next call of the
-`/sync` endpoint in order to specify the starting point in the event timeline
-you would like to receive messages from.
 
 ### `callbacks.py`
 
