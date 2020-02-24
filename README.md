@@ -107,7 +107,7 @@ defined for when a error is found while the config file is being processed.
 The sample configuration file. People running your bot should be advised to
 copy this file to `config.yaml`, then edit it according to their needs. Be sure
 never to check the edited `config.yaml` into source control since it'll likely
-contain sensitive details like an access token!
+contain sensitive details like passwords!
 
 ## Questions?
 
