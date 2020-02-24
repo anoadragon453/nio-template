@@ -45,6 +45,13 @@ class Config(object):
         self.database_filepath = self._get_cfg(["storage", "database_filepath"], required=True)
         self.store_filepath = self._get_cfg(["storage", "store_filepath"], required=True)
 
+        # Create the store folder if it doesn't exist
+        if not os.path.isdir(self.store_filepath):
+            if not os.path.exists(self.store_filepath):
+                os.mkdir(self.store_filepath)
+            else:
+                raise ConfigError(f"storage.store_filepath '{self.store_filepath}' is not a directory")
+
         # Matrix bot account setup
         self.user_id = self._get_cfg(["matrix", "user_id"], required=True)
         if not re.match("@.*:.*", self.user_id):

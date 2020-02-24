@@ -34,19 +34,15 @@ async def main():
         max_limit_exceeded=0,
         max_timeouts=0,
         store_sync_tokens=True,
+        encryption_enabled=config.enable_encryption,
     )
 
     # Initialize the matrix client
-    if config.enable_encryption:
-        store_path = config.store_filepath
-    else:
-        store_path = None
-
     client = AsyncClient(
         config.homeserver_url,
         config.user_id,
         device_id=config.device_id,
-        store_path=store_path,
+        store_path=config.store_filepath,
         config=client_config,
     )
 
