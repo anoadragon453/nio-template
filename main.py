@@ -78,6 +78,7 @@ async def main():
                 else:
                     # We don't know why this was raised. Throw it at the user
                     logger.fatal("Error logging in: %s", e)
+                    return False
 
             # Login succeeded!
 
