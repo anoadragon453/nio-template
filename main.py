@@ -7,13 +7,13 @@ from nio import (
     AsyncClient,
     AsyncClientConfig,
     RoomMessageText,
-    InviteEvent,
+    InviteMemberEvent,
     LoginError,
     LocalProtocolError,
 )
 from aiohttp import (
     ServerDisconnectedError,
-    ClientConnectionError,
+    ClientConnectionError
 )
 from callbacks import Callbacks
 from config import Config
@@ -49,7 +49,7 @@ async def main():
     # Set up event callbacks
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
-    client.add_event_callback(callbacks.invite, (InviteEvent,))
+    client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
 
     # Keep trying to reconnect on failure (with some time in-between)
     while True:
