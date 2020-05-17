@@ -1,5 +1,4 @@
 import os
-import logging
 from time import sleep
 from nio import (
     AsyncClient,
@@ -17,12 +16,17 @@ from matrixbot.callbacks import Callbacks
 from matrixbot.config import Config
 from matrixbot.storage import Storage
 
+import logging
 logger = logging.getLogger(__name__)
 
 
 class Bot():
 
     def __init__(self, config_filepath):
+        """
+        Args:
+             config_filepath (str): path to the bot config yaml file
+        """
         # Read config file
         self.config = Config(config_filepath)
 
@@ -53,6 +57,7 @@ class Bot():
 
 
     async def login(self):
+        """Login the bot and start syncing with the homeserver"""
         # Keep trying to reconnect on failure (with some time in-between)
         while True:
             try:

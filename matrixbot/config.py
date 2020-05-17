@@ -1,4 +1,3 @@
-import logging
 import re
 import os
 import yaml
@@ -6,6 +5,7 @@ import sys
 from typing import List, Any
 from matrixbot.errors import ConfigError
 
+import logging
 logger = logging.getLogger()
 
 
