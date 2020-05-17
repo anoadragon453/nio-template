@@ -1,4 +1,4 @@
-from chat_functions import send_text_to_room
+from matrixbot.chat_functions import send_text_to_room
 import logging
 
 logger = logging.getLogger(__name__)

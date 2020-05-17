@@ -8,15 +8,13 @@ env3/
 
 # Bot local files
 *.db
+store/
 
 # Config file
 config.yaml
 
 # Python
 __pycache__/
-
-# Config file
-config.yaml
 
 # Log files
 *.log

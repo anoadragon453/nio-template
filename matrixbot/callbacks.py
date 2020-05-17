@@ -1,11 +1,11 @@
-from chat_functions import (
+from matrixbot.chat_functions import (
     send_text_to_room,
 )
-from bot_commands import Command
+from matrixbot.bot_commands import Command
+from matrixbot.message_responses import Message
 from nio import (
     JoinError,
 )
-from message_responses import Message
 
 import logging
 logger = logging.getLogger(__name__)
