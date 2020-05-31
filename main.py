@@ -41,7 +41,7 @@ async def main():
         max_limit_exceeded=0,
         max_timeouts=0,
         store_sync_tokens=True,
-        encryption_enabled=config.enable_encryption,
+        encryption_enabled=True,
     )
 
     # Initialize the matrix client
@@ -73,19 +73,14 @@ async def main():
                     logger.error(f"Failed to login: %s", login_response.message)
                     return False
             except LocalProtocolError as e:
-                # There's an edge case here where the user enables encryption but hasn't installed
-                # the correct C dependencies. In that case, a LocalProtocolError is raised on login.
-                # Warn the user if these conditions are met.
-                if config.enable_encryption:
-                    logger.fatal(
-                        "Failed to login and encryption is enabled. Have you installed the correct dependencies? "
-                        "https://github.com/poljar/matrix-nio#installation"
-                    )
-                    return False
-                else:
-                    # We don't know why this was raised. Throw it at the user
-                    logger.fatal("Error logging in: %s", e)
-                    return False
+                # There's an edge case here where the user hasn't installed the correct C
+                # dependencies. In that case, a LocalProtocolError is raised on login.
+                logger.fatal(
+                    "Failed to login. Have you installed the correct dependencies? "
+                    "https://github.com/poljar/matrix-nio#installation "
+                    "Error: %s", e
+                )
+                return False
 
             # Login succeeded!
 
