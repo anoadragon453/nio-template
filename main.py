@@ -2,6 +2,7 @@
 
 import logging
 import asyncio
+import sys
 from time import sleep
 from nio import (
     AsyncClient,
@@ -24,7 +25,13 @@ logger = logging.getLogger(__name__)
 
 async def main():
     # Read config file
-    config = Config("config.yaml")
+
+    # A different config file path can be specified as the first command line argument
+    if len(sys.argv) > 1:
+        config_filepath = sys.argv[1]
+    else:
+        config_filepath = "config.yaml"
+    config = Config(config_filepath)
 
     # Configure the database
     store = Storage(config.database_filepath)
