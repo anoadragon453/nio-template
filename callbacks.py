@@ -78,6 +78,9 @@ class Callbacks(object):
                     attempt, result.message,
                 )
             else:
-                logger.info(f"Joined {room.room_id}")
                 break
+        else:
+            logger.error("Unable to join room: %s", room.room_id)
 
+        # Successfully joined room
+        logger.info(f"Joined {room.room_id}")
