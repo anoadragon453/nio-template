@@ -12,6 +12,9 @@ matrix-nio can be found
 * [TheForcer/vision-nio](https://github.com/TheForcer/vision-nio) - A general purpose matrix chatbot
 * [anoadragon453/matrix-reminder-bot](https://github.com/anoadragon453/matrix-reminder-bot
 ) - A matrix bot to remind you about things
+* [anoadragon453/drawing-challenge-bot](https://github.com/anoadragon453/drawing-challenge-bot) - A matrix bot to
+post historical, weekly art challenges from reddit to a room
+
 
 Want your project listed here? [Edit this
 doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
