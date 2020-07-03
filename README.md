@@ -14,6 +14,8 @@ matrix-nio can be found
 ) - A matrix bot to remind you about things
 * [anoadragon453/drawing-challenge-bot](https://github.com/anoadragon453/drawing-challenge-bot) - A matrix bot to
 post historical, weekly art challenges from reddit to a room
+* [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
+extended by plugins
 
 
 Want your project listed here? [Edit this
