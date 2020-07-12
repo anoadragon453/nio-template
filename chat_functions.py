@@ -12,7 +12,9 @@ async def send_text_to_room(
     room_id,
     message,
     notice=True,
-    markdown_convert=True
+    markdown_convert=True,
+    formatted=True,
+    code=False
 ):
     """Send text to a matrix room
 
@@ -28,17 +30,28 @@ async def send_text_to_room(
 
         markdown_convert (bool): Whether to convert the message content to markdown.
             Defaults to true.
+            
+        formatted (bool): whether message should be sent as formatted message.
+            Defaults to True.
+        
+        code (bool): wether message should be sent as code block with fixed-size font
+            If set to True, markdown_convert will be ignored.
+            Defaults to False
     """
     # Determine whether to ping room members or not
     msgtype = "m.notice" if notice else "m.text"
 
     content = {
         "msgtype": msgtype,
-        "format": "org.matrix.custom.html",
         "body": message,
     }
 
-    if markdown_convert:
+    if formatted:
+        content["format"] = "org.matrix.custom.html"
+
+    if code:
+        content["formatted_body"] = "<pre><code>" + message + "</code></pre>"
+    elif markdown_convert:
         content["formatted_body"] = markdown(message)
 
     try:
