@@ -8,6 +8,7 @@ env3/
 
 # Bot local files
 *.db
+store/
 
 # Config file
 config.yaml
