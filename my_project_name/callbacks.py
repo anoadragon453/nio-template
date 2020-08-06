@@ -1,11 +1,8 @@
-from chat_functions import (
-    send_text_to_room,
-)
-from bot_commands import Command
+from my_project_name.bot_commands import Command
 from nio import (
     JoinError,
 )
-from message_responses import Message
+from my_project_name.message_responses import Message
 
 import logging
 logger = logging.getLogger(__name__)
