@@ -1,4 +1,4 @@
-# Nio Template
+# Nio Template <a href="https://matrix.to/#/#nio-template:matrix.org"><img src="https://img.shields.io/matrix/nio-template:matrix.org?color=blue&label=Join%20the%20Matrix%20Room&server_fqdn=matrix-client.matrix.org" />
 
 A template for creating bots with
 [matrix-nio](https://github.com/poljar/matrix-nio). The documentation for
