@@ -16,9 +16,9 @@ from aiohttp import (
     ServerDisconnectedError,
     ClientConnectionError
 )
-from callbacks import Callbacks
-from config import Config
-from storage import Storage
+from my_project_name.callbacks import Callbacks
+from my_project_name.config import Config
+from my_project_name.storage import Storage
 
 logger = logging.getLogger(__name__)
 
