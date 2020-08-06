@@ -16,6 +16,7 @@ matrix-nio can be found
 post historical, weekly art challenges from reddit to a room
 * [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
 extended by plugins
+* [gracchus163/hopeless](https://github.com/gracchus163/hopeless) - COREbot for the Hope2020 conference Matrix server
 
 
 Want your project listed here? [Edit this
