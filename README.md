@@ -17,11 +17,31 @@ post historical, weekly art challenges from reddit to a room
 * [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
 extended by plugins
 
-
 Want your project listed here? [Edit this
 doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
 
 ## Project structure
+
+The majority of the code is kept inside of the `my_project_name` folder, which
+is in itself a [python package](https://docs.python.org/3/tutorial/modules.html),
+the `__init__.py` file inside declaring it as such.
+
+To run the bot, the `my-project-name` script in the root of the codebase is
+available. It will import the `main` function from `main.py` file in the
+package and run it. To properly install this script into your python environment,
+run `pip install -e .` in the project's root directory.
+
+`setup.py` contains package information (for publishing your code to
+[PyPI](https://pypi.org)) and `setup.cfg` just contains some configuration
+options for linting tools.
+
+`sample.config.yaml` is a sample configuration file. People running your bot
+should be advised to copy this file to `config.yaml`, then edit it according to
+their needs. Be sure never to check the edited `config.yaml` into source control
+since it'll likely contain sensitive details such as passwords!
+
+Below is a detailed description of each of the source code files contained within
+the `my_project_name` directory:
 
 ### `main.py`
 
@@ -108,13 +128,6 @@ method for sending formatted messages to a room.
 
 Custom error types for the bot. Currently there's only one special type that's
 defined for when a error is found while the config file is being processed.
-
-### `sample.config.yaml`
-
-The sample configuration file. People running your bot should be advised to
-copy this file to `config.yaml`, then edit it according to their needs. Be sure
-never to check the edited `config.yaml` into source control since it'll likely
-contain sensitive details like passwords!
 
 ## Questions?
 
