@@ -4,5 +4,6 @@ class ConfigError(RuntimeError):
     Args:
         msg (str): The message displayed to the user on error
     """
+
     def __init__(self, msg):
         super(ConfigError, self).__init__("%s" % (msg,))

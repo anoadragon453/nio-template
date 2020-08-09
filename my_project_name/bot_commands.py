@@ -43,8 +43,10 @@ class Command(object):
     async def _show_help(self):
         """Show the help text"""
         if not self.args:
-            text = ("Hello, I am a bot made with matrix-nio! Use `help commands` to view "
-                    "available commands.")
+            text = (
+                "Hello, I am a bot made with matrix-nio! Use `help commands` to view "
+                "available commands."
+            )
             await send_text_to_room(self.client, self.room.room_id, text)
             return
 
