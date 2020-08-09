@@ -28,7 +28,7 @@ is in itself a [python package](https://docs.python.org/3/tutorial/modules.html)
 the `__init__.py` file inside declaring it as such.
 
 To run the bot, the `my-project-name` script in the root of the codebase is
-available. It will import the `main` function from `main.py` file in the
+available. It will import the `main` function from the `main.py` file in the
 package and run it. To properly install this script into your python environment,
 run `pip install -e .` in the project's root directory.
 
