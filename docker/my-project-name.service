@@ -1,0 +1,16 @@
+[Unit]
+Description=A matrix bot that does amazing things!
+
+[Service]
+Type=simple
+User=my-project-name
+Group=my-project-name
+WorkingDirectory=/path/to/my-project-name/docker
+ExecStart=/usr/bin/docker-compose up my-project-name
+ExecStop=/usr/bin/docker-compose stop my-project-name
+RemainAfterExit=yes
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

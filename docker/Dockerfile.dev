@@ -1,0 +1,71 @@
+# This dockerfile is crafted specifically for development purposes.
+# Please use `Dockerfile` instead if you wish to deploy for production.
+#
+# This file differs as it does not use a builder container, nor does it
+# reinstall the project's python package after copying the source code,
+# saving significant time during rebuilds.
+#
+# To build the image, run `docker build` command from the root of the
+# repository:
+#
+#    docker build -f docker/Dockerfile .
+#
+# There is an optional PYTHON_VERSION build argument which sets the
+# version of python to build against. For example:
+#
+#    docker build -f docker/Dockerfile --build-arg PYTHON_VERSION=3.8 .
+#
+# An optional LIBOLM_VERSION build argument which sets the
+# version of libolm to build against. For example:
+#
+#    docker build -f docker/Dockerfile --build-arg LIBOLM_VERSION=3.1.4 .
+#
+
+ARG PYTHON_VERSION=3.8
+FROM docker.io/python:${PYTHON_VERSION}-alpine3.11
+
+##
+## Build libolm for matrix-nio e2e support
+##
+
+# Install libolm build dependencies
+ARG LIBOLM_VERSION=3.1.4
+RUN apk add --no-cache \
+    make \
+    cmake \
+    gcc \
+    g++ \
+    git \
+    libffi-dev \
+    yaml-dev \
+    python3-dev
+
+# Build libolm
+COPY docker/build_and_install_libolm.sh /scripts/
+RUN /scripts/build_and_install_libolm.sh ${LIBOLM_VERSION}
+
+# Install native runtime dependencies
+RUN apk add --no-cache \
+    musl-dev \
+    libpq \
+    postgresql-dev \
+    libstdc++
+
+# Install python runtime modules. We do this before copying the source code
+# such that these dependencies can be cached
+RUN mkdir -p /src/my_project_name
+COPY my_project_name/__init__.py /src/my_project_name/
+COPY README.md my-project-name /src/
+COPY setup.py /src/setup.py
+RUN pip install -e "/src/.[postgres]"
+
+# Now copy the source code
+COPY my_project_name/*.py /src/my_project_name/
+COPY *.py /src/
+
+# Specify a volume that holds the config file, SQLite3 database,
+# and the matrix-nio store
+VOLUME ["/data"]
+
+# Start the app
+ENTRYPOINT ["my-project-name", "/data/config.yaml"]
