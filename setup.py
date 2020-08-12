@@ -28,7 +28,7 @@ setup(
     name="my-project-name",
     version=version,
     url="https://github.com/anoadragon453/nio-template",
-    description="A matrix bot to remind you about things!",
+    description="A matrix bot to do amazing things!",
     packages=find_packages(exclude=["tests", "tests.*"]),
     install_requires=[
         "matrix-nio[e2e]>=0.10.0",
