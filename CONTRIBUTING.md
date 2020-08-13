@@ -33,9 +33,57 @@ remove the option altogether to allow all addresses.
 
 ### Running natively
 
-If you would rather not or are unable to run docker, please follow the Native
-Installation, Configuration and Running sections in the
-[project readme](README.md#native-installation).
+If you would rather not or are unable to run docker, the following instructions
+will explain how to install the project dependencies natively.
+
+#### Install libolm
+
+You can install [libolm](https://gitlab.matrix.org/matrix-org/olm) from source,
+or alternatively, check your system's package manager. Version `3.0.0` or
+greater is required.
+
+**(Optional) postgres development headers**
+
+By default, the bot uses SQLite as its storage backend. This is fine for a
+few hundred users, but if you plan to support a much higher volume
+of requests, you may consider using Postgres as a database backend instead.
+
+If you want to use postgres as a database backend, you'll need to install
+postgres development headers:
+
+Debian/Ubuntu:
+
+```
+sudo apt install libpq-dev libpq5
+```
+
+Arch:
+
+```
+sudo pacman -S postgresql-libs
+```
+
+#### Install Python dependencies
+
+Create and activate a Python 3 virtual environment:
+
+```
+virtualenv -p python3 env
+source env/bin/activate
+```
+
+Install python dependencies:
+
+```
+pip install -e .
+```
+
+(Optional) If you want to use postgres as a database backend, use the following
+command to install postgres dependencies alongside those that are necessary:
+
+```
+pip install ".[postgres]"
+```
 
 ## Development dependencies
 
@@ -68,4 +116,5 @@ list](https://github.com/anoadragon453/nio-template/issues). What
 feature would you like to see or bug do you want to be fixed?
 
 If you would like to talk any ideas over before working on them, you can reach
-me at `@andrewm:amorgan.xyz` on matrix.
+me at [@andrewm:amorgan.xyz](https://matrix.to/#/@andrewm:amorgan.xyz)
+on matrix.
