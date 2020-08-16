@@ -5,33 +5,9 @@ to help you with contributing.
 
 ## Setting up your development environment
 
-### Using `docker-compose`
-
-It is **recommended** to use Docker Compose to run the bot while
-developing, as all necessary dependencies are handled for you. After
-installation and ensuring the `docker-compose` command works, you need to:
-
-1. Create a data directory and config file by following the
-   [docker setup instructions](docker#setup).
-
-2. Create a docker volume pointing to that directory:
-
-   ```
-   docker volume create \
-     --opt type=none \
-     --opt o=bind \
-     --opt device="/path/to/data/dir" data_volume
-   ```
-
-Run `docker/start-dev.sh` to start the bot.
-
-**Note:** If you are trying to connect to a Synapse instance running on the
-host, you need to allow the IP address of the docker container to connect. This
-is controlled by `bind_addresses` in the `listeners` section of Synapse's
-config. If present, either add the docker internal IP address to the list, or
-remove the option altogether to allow all addresses.
-
-### Running natively
+See the
+[Install the dependencies section of SETUP.md](SETUP.md#install-the-dependencies)
+for help setting up a running environment for the bot.
 
 If you would rather not or are unable to run docker, the following instructions
 will explain how to install the project dependencies natively.
@@ -85,7 +61,7 @@ command to install postgres dependencies alongside those that are necessary:
 pip install ".[postgres]"
 ```
 
-## Development dependencies
+### Development dependencies
 
 There are some python dependencies that are required for linting/testing etc.
 You can install them with:
