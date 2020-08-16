@@ -36,6 +36,7 @@ setup(
         "PyYAML>=5.1.2",
     ],
     extras_require={
+        "postgres": ["psycopg2>=2.8.5"],
         "dev": [
             "isort==5.0.4",
             "flake8==3.8.3",
