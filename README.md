@@ -5,23 +5,41 @@ A template for creating bots with
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
+This repo contains a working Matrix echo bot that can be easily extended to your needs. Detailed documentation is included as well as a step-by-step guide on basic bot building.
+
+Features include out-of-the-box support for:
+
+* Bot commands
+* SQLite3 and Postgres database backends
+* Configuration files
+* Multi-level logging
+* Docker
+* Participation in end-to-end encrypted rooms
+
 ## Projects using nio-template
 
+* [anoadragon453/matrix-reminder-bot](https://github.com/anoadragon453/matrix-reminder-bot
+) - A matrix bot to remind you about things
+* [gracchus163/hopeless](https://github.com/gracchus163/hopeless) - COREbot for the Hope2020 conference Matrix server
+* [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
+extended by plugins
 * [anoadragon453/msc-chatbot](https://github.com/anoadragon453/msc-chatbot) - A matrix bot for matrix spec proposals
 * [anoadragon453/matrix-episode-bot](https://github.com/anoadragon453/matrix-episode-bot) - A matrix bot to post episode links
 * [TheForcer/vision-nio](https://github.com/TheForcer/vision-nio) - A general purpose matrix chatbot
-* [anoadragon453/matrix-reminder-bot](https://github.com/anoadragon453/matrix-reminder-bot
-) - A matrix bot to remind you about things
 * [anoadragon453/drawing-challenge-bot](https://github.com/anoadragon453/drawing-challenge-bot) - A matrix bot to
 post historical, weekly art challenges from reddit to a room
-* [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
-extended by plugins
-* [gracchus163/hopeless](https://github.com/gracchus163/hopeless) - COREbot for the Hope2020 conference Matrix server
 
 Want your project listed here? [Edit this
-doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
+page!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
+
+## Getting started
+
+See [SETUP.md](SETUP.md) for how to setup and run the template project.
 
 ## Project structure
+
+*A reference of each file included in the template repository, its purpose and
+what it does.*
 
 The majority of the code is kept inside of the `my_project_name` folder, which
 is in itself a [python package](https://docs.python.org/3/tutorial/modules.html),
@@ -132,5 +150,6 @@ defined for when a error is found while the config file is being processed.
 
 ## Questions?
 
-Any questions? Ask in
-[#nio-template:amorgan.xyz](https://matrix.to/#/!vmWBOsOkoOtVHMzZgN:amorgan.xyz?via=amorgan.xyz)!
+Any questions? Please ask them in
+[#nio-template:amorgan.xyz](https://matrix.to/#/!vmWBOsOkoOtVHMzZgN:amorgan.xyz?via=amorgan.xyz)
+and we'll help you out!
