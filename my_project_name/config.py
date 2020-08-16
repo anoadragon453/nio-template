@@ -52,17 +52,17 @@ class Config(object):
             logger.addHandler(handler)
 
         # Storage setup
-        self.store_filepath = self._get_cfg(
-            ["storage", "store_filepath"], required=True
+        self.store_path = self._get_cfg(
+            ["storage", "store_path"], required=True
         )
 
         # Create the store folder if it doesn't exist
-        if not os.path.isdir(self.store_filepath):
-            if not os.path.exists(self.store_filepath):
-                os.mkdir(self.store_filepath)
+        if not os.path.isdir(self.store_path):
+            if not os.path.exists(self.store_path):
+                os.mkdir(self.store_path)
             else:
                 raise ConfigError(
-                    f"storage.store_filepath '{self.store_filepath}' is not a directory"
+                    f"storage.store_path '{self.store_path}' is not a directory"
                 )
 
         # Database setup

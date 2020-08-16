@@ -26,10 +26,10 @@ async def main():
 
     # A different config file path can be specified as the first command line argument
     if len(sys.argv) > 1:
-        config_filepath = sys.argv[1]
+        config_path = sys.argv[1]
     else:
-        config_filepath = "config.yaml"
-    config = Config(config_filepath)
+        config_path = "config.yaml"
+    config = Config(config_path)
 
     # Configure the database
     store = Storage(config)
@@ -47,7 +47,7 @@ async def main():
         config.homeserver_url,
         config.user_id,
         device_id=config.device_id,
-        store_path=config.store_filepath,
+        store_path=config.store_path,
         config=client_config,
     )
 
