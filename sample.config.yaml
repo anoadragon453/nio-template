@@ -17,14 +17,18 @@ matrix:
   # If this device ID already exists, messages will be dropped silently in encrypted rooms
   device_id: ABCDEFGHIJ
   # What to name the logged in device
-  device_name: nio-template
+  device_name: my-project-name
 
 storage:
-  # The path to the database
-  database_filepath: "bot.db"
+  # The database connection string
+  # For SQLite3, this would look like:
+  #     database: "sqlite://bot.db"
+  # For Postgres, this would look like:
+  #     database: "postgres://username:password@localhost/dbname?sslmode=disable"
+  database: "sqlite://bot.db"
   # The path to a directory for internal bot storage
   # containing encryption keys, sync tokens, etc.
-  store_filepath: "./store"
+  store_path: "./store"
 
 # Logging setup
 logging:

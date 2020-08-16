@@ -52,9 +52,6 @@ class Config(object):
             logger.addHandler(handler)
 
         # Storage setup
-        self.database_filepath = self._get_cfg(
-            ["storage", "database_filepath"], required=True
-        )
         self.store_filepath = self._get_cfg(
             ["storage", "store_filepath"], required=True
         )
@@ -67,6 +64,23 @@ class Config(object):
                 raise ConfigError(
                     f"storage.store_filepath '{self.store_filepath}' is not a directory"
                 )
+
+        # Database setup
+        database_path = self._get_cfg(["storage", "database"], required=True)
+
+        # Support both SQLite and Postgres backends
+        # Determine which one the user intends
+        sqlite_scheme = "sqlite://"
+        postgres_scheme = "postgres://"
+        if database_path.startswith(sqlite_scheme):
+            self.database = {
+                "type": "sqlite",
+                "connection_string": database_path[len(sqlite_scheme) :],
+            }
+        elif database_path.startswith(postgres_scheme):
+            self.database = {"type": "postgres", "connection_string": database_path}
+        else:
+            raise ConfigError("Invalid connection string for storage.database")
 
         # Matrix bot account setup
         self.user_id = self._get_cfg(["matrix", "user_id"], required=True)
