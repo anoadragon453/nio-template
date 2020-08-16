@@ -26,12 +26,16 @@ created `data` directory. Fill it out as you normally would, with a few minor
 differences:
 
 * The bot store directory should reside inside of the data directory so that it
-  is not wiped on container restart. Change it from the default to `/data/store`.
-  There is no need to create this directory yourself, my-project-name will
-  create it on startup if it does not exist.
+  is not wiped on container restart. Change it from the default to
+  `/data/store`. There is no need to create this directory yourself, it will be
+  created on startup if it does not exist.
 
-* Choose whether you want to use SQLite or Postgres as your database backend. If
-  using SQLite, ensure your database file is stored inside the `/data` directory:
+* Choose whether you want to use SQLite or Postgres as your database backend.
+  Postgres has increased performance over SQLite, and is recommended for
+  deployments with many users.
+
+  If using SQLite, ensure your database file is
+  stored inside the `/data` directory:
 
   ```
   database: "sqlite:///data/bot.db"
@@ -66,8 +70,8 @@ docker volume create \
   --opt device="/path/to/data/dir" data_volume
 ```
 
-If you want to use the postgres container defined in `docker-compose.yaml`, start that
-first:
+Optional: If you want to use the postgres container defined in
+`docker-compose.yaml`, start that first:
 
 ```
 docker-compose up -d postgres
