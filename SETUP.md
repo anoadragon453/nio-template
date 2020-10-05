@@ -2,9 +2,7 @@
 
 nio-template is a sample repository of a working Matrix bot that can be taken
 and transformed into one's own bot, service or whatever else may be necessary.
-Below is a quick setup guide to running the existing bot. For guidance on how
-to get started on transforming the codebase into your own, personalised
-chatbot, see [GETTING_STARTED.md](GETTING_STARTED.md).
+Below is a quick setup guide to running the existing bot.
 
 ## Install the dependencies
 
@@ -140,8 +138,7 @@ my-project-name
 You'll notice that "my-project-name" is scattered throughout the codebase. When
 it comes time to modifying the code for your own purposes, you are expected to
 replace every instance of "my-project-name" and its variances with your own
-project's name.  Details on doing so are described in
-[GETTING_STARTED.md](GETTING_STARTED.md).
+project's name.
 
 By default, the bot will run with the config file at `./config.yaml`. However, an
 alternative relative or absolute filepath can be specified after the command:
