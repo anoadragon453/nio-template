@@ -28,6 +28,8 @@ extended by plugins
 * [TheForcer/vision-nio](https://github.com/TheForcer/vision-nio) - A general purpose matrix chatbot
 * [anoadragon453/drawing-challenge-bot](https://github.com/anoadragon453/drawing-challenge-bot) - A matrix bot to
 post historical, weekly art challenges from reddit to a room
+* [8go/matrix-eno-bot](https://github.com/8go/matrix-eno-bot) - A bot to be used as a) personal assistant or b) as 
+an admin tool to maintain your Matrix installation or server
 
 Want your project listed here? [Edit this
 page!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
