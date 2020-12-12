@@ -9,8 +9,10 @@ command_prefix: "!c"
 matrix:
   # The Matrix User ID of the bot account
   user_id: "@bot:example.com"
-  # Matrix account password
+  # Matrix account password (optional if access token used)
   user_password: ""
+  # Matrix account access token (optional if password used)
+  #user_token: ""
   # The URL of the homeserver to connect to
   homeserver_url: https://example.com
   # The device ID that is **non pre-existing** device
