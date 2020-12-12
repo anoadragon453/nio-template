@@ -16,6 +16,8 @@ config.yaml
 # Python
 __pycache__/
 *.egg-info/
+build/
+dist/
 
 # Config file
 config.yaml
