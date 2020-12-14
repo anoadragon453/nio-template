@@ -51,6 +51,10 @@ async def main():
         config=client_config,
     )
 
+    if config.user_token:
+        client.access_token = config.user_token
+        client.user_id = config.user_id
+
     # Set up event callbacks
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
@@ -59,28 +63,36 @@ async def main():
     # Keep trying to reconnect on failure (with some time in-between)
     while True:
         try:
-            # Try to login with the configured username/password
-            try:
-                login_response = await client.login(
-                    password=config.user_password, device_name=config.device_name,
-                )
+            if config.user_token:
+                # Use token to log in
+                client.load_store()
 
-                # Check if login failed
-                if type(login_response) == LoginError:
-                    logger.error("Failed to login: %s", login_response.message)
+                # Sync encryption keys with the server
+                if client.should_upload_keys:
+                    await client.keys_upload()
+            else:
+                # Try to login with the configured username/password
+                try:
+                    login_response = await client.login(
+                        password=config.user_password, device_name=config.device_name,
+                    )
+
+                    # Check if login failed
+                    if type(login_response) == LoginError:
+                        logger.error("Failed to login: %s", login_response.message)
+                        return False
+                except LocalProtocolError as e:
+                    # There's an edge case here where the user hasn't installed the correct C
+                    # dependencies. In that case, a LocalProtocolError is raised on login.
+                    logger.fatal(
+                        "Failed to login. Have you installed the correct dependencies? "
+                        "https://github.com/poljar/matrix-nio#installation "
+                        "Error: %s",
+                        e,
+                    )
                     return False
-            except LocalProtocolError as e:
-                # There's an edge case here where the user hasn't installed the correct C
-                # dependencies. In that case, a LocalProtocolError is raised on login.
-                logger.fatal(
-                    "Failed to login. Have you installed the correct dependencies? "
-                    "https://github.com/poljar/matrix-nio#installation "
-                    "Error: %s",
-                    e,
-                )
-                return False
 
-            # Login succeeded!
+                # Login succeeded!
 
             logger.info(f"Logged in as {config.user_id}")
             await client.sync_forever(timeout=30000, full_state=True)
