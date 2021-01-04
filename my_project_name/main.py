@@ -12,6 +12,7 @@ from nio import (
     LocalProtocolError,
     LoginError,
     RoomMessageText,
+    UnknownEvent,
 )
 
 from my_project_name.callbacks import Callbacks
@@ -59,6 +60,7 @@ async def main():
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
     client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
+    client.add_event_callback(callbacks.unknown, (UnknownEvent,))
 
     # Keep trying to reconnect on failure (with some time in-between)
     while True:
@@ -74,7 +76,8 @@ async def main():
                 # Try to login with the configured username/password
                 try:
                     login_response = await client.login(
-                        password=config.user_password, device_name=config.device_name,
+                        password=config.user_password,
+                        device_name=config.device_name,
                     )
 
                     # Check if login failed

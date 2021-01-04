@@ -1,4 +1,4 @@
-from my_project_name.chat_functions import send_text_to_room
+from my_project_name.chat_functions import react_to_event, send_text_to_room
 
 
 class Command(object):
@@ -30,6 +30,8 @@ class Command(object):
         """Process the command"""
         if self.command.startswith("echo"):
             await self._echo()
+        elif self.command.startswith("react"):
+            await self._react()
         elif self.command.startswith("help"):
             await self._show_help()
         else:
@@ -39,6 +41,20 @@ class Command(object):
         """Echo back the command's arguments"""
         response = " ".join(self.args)
         await send_text_to_room(self.client, self.room.room_id, response)
+
+    async def _react(self):
+        """Make the bot react to the command message"""
+        # React with a start emoji
+        reaction = "⭐"
+        await react_to_event(
+            self.client, self.room.room_id, self.event.event_id, reaction
+        )
+
+        # React with some generic text
+        reaction = "Some text"
+        await react_to_event(
+            self.client, self.room.room_id, self.event.event_id, reaction
+        )
 
     async def _show_help(self):
         """Show the help text"""

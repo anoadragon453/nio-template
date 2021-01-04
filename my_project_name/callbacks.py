@@ -1,8 +1,9 @@
 import logging
 
-from nio import JoinError
+from nio import JoinError, MatrixRoom, RoomGetEventError, UnknownEvent
 
 from my_project_name.bot_commands import Command
+from my_project_name.chat_functions import make_pill, send_text_to_room
 from my_project_name.message_responses import Message
 
 logger = logging.getLogger(__name__)
@@ -86,3 +87,66 @@ class Callbacks(object):
 
         # Successfully joined room
         logger.info(f"Joined {room.room_id}")
+
+    async def _reaction(
+        self, room: MatrixRoom, event: UnknownEvent, reacted_to_id: str
+    ):
+        """A reaction was sent to one of our messages. Let's send a reply acknowledging it.
+
+        Args:
+            room: The room the reaction was sent in.
+
+            event: The reaction event.
+
+            reacted_to_id: The event ID that the reaction points to.
+        """
+        logger.debug(f"Got reaction to {room.room_id} from {event.sender}.")
+
+        # Get the original event that was reacted to
+        event_response = await self.client.room_get_event(room.room_id, reacted_to_id)
+        if isinstance(event_response, RoomGetEventError):
+            logger.warning(
+                "Error getting event that was reacted to (%s)", reacted_to_id
+            )
+            return
+        reacted_to_event = event_response.event
+
+        # Only acknowledge reactions to events that we sent
+        if reacted_to_event.sender != self.config.user_id:
+            return
+
+        # Send a message acknowledging the reaction
+        reaction_sender_pill = make_pill(event.sender)
+        reaction_content = (
+            event.source.get("content", {}).get("m.relates_to", {}).get("key")
+        )
+        message = (
+            f"{reaction_sender_pill} reacted to this event with `{reaction_content}`!"
+        )
+        await send_text_to_room(
+            self.client,
+            room.room_id,
+            message,
+            reply_to_event_id=reacted_to_id,
+        )
+
+    async def unknown(self, room: MatrixRoom, event: UnknownEvent):
+        """Callback for when an event with a type that is unknown to matrix-nio is received.
+        Currently this is used for reaction events, which are not specced.
+
+        Args:
+            room: The room the reaction was sent in.
+
+            event: The reaction event.
+        """
+        if event.type == "m.reaction":
+            # Get the ID of the event this was a reaction to
+            relation_dict = event.source.get("content", {}).get("m.relates_to", {})
+
+            reacted_to = relation_dict.get("event_id")
+            if reacted_to and relation_dict.get("rel_type") == "m.annotation":
+                await self._reaction(room, event, reacted_to)
+
+        logger.debug(
+            f"Got unknown event with type to {event.type} from {event.sender} in {room.room_id}."
+        )

@@ -1,28 +1,37 @@
 import logging
+from typing import Optional, Union
 
 from markdown import markdown
-from nio import SendRetryError
+from nio import AsyncClient, ErrorResponse, Response, SendRetryError
 
 logger = logging.getLogger(__name__)
 
 
 async def send_text_to_room(
-    client, room_id, message, notice=True, markdown_convert=True
+    client: AsyncClient,
+    room_id: str,
+    message: str,
+    notice: bool = True,
+    markdown_convert: bool = True,
+    reply_to_event_id: Optional[str] = None,
 ):
-    """Send text to a matrix room
+    """Send text to a matrix room.
 
     Args:
-        client (nio.AsyncClient): The client to communicate to matrix with
+        client: The client to communicate to matrix with.
 
-        room_id (str): The ID of the room to send the message to
+        room_id: The ID of the room to send the message to.
 
-        message (str): The message content
+        message: The message content.
 
-        notice (bool): Whether the message should be sent with an "m.notice" message type
-            (will not ping users)
+        notice: Whether the message should be sent with an "m.notice" message type
+            (will not ping users).
 
-        markdown_convert (bool): Whether to convert the message content to markdown.
+        markdown_convert: Whether to convert the message content to markdown.
             Defaults to true.
+
+        reply_to_event_id: Whether this message is a reply to another event. The event
+            ID this is message is a reply to.
     """
     # Determine whether to ping room members or not
     msgtype = "m.notice" if notice else "m.text"
@@ -36,9 +45,74 @@ async def send_text_to_room(
     if markdown_convert:
         content["formatted_body"] = markdown(message)
 
+    if reply_to_event_id:
+        content["m.relates_to"] = {"m.in_reply_to": {"event_id": reply_to_event_id}}
+
     try:
         await client.room_send(
-            room_id, "m.room.message", content, ignore_unverified_devices=True,
+            room_id,
+            "m.room.message",
+            content,
+            ignore_unverified_devices=True,
         )
     except SendRetryError:
         logger.exception(f"Unable to send message response to {room_id}")
+
+
+def make_pill(user_id: str, displayname: str = None) -> str:
+    """Convert a user ID (and optionally a display name) to a formatted user 'pill'
+
+    Args:
+        user_id: The MXID of the user.
+
+        displayname: An optional displayname. Clients like Element will figure out the
+            correct display name no matter what, but other clients may not. If not
+            provided, the MXID will be used instead.
+
+    Returns:
+        The formatted user pill.
+    """
+    if not displayname:
+        # Use the user ID as the displayname if not provided
+        displayname = user_id
+
+    return f'<a href="https://matrix.to/#/{user_id}">{displayname}</a>'
+
+
+async def react_to_event(
+    client: AsyncClient,
+    room_id: str,
+    event_id: str,
+    reaction_text: str,
+) -> Union[Response, ErrorResponse]:
+    """Reacts to a given event in a room with the given reaction text
+
+    Args:
+        client: The client to communicate to matrix with.
+
+        room_id: The ID of the room to send the message to.
+
+        event_id: The ID of the event to react to.
+
+        reaction_text: The string to react with. Can also be (one or more) emoji characters.
+
+    Returns:
+        A nio.Response or nio.ErrorResponse if an error occurred.
+
+    Raises:
+        SendRetryError: If the reaction was unable to be sent.
+    """
+    content = {
+        "m.relates_to": {
+            "rel_type": "m.annotation",
+            "event_id": event_id,
+            "key": reaction_text,
+        }
+    }
+
+    return await client.room_send(
+        room_id,
+        "m.reaction",
+        content,
+        ignore_unverified_devices=True,
+    )
