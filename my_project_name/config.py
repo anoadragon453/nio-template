@@ -9,6 +9,9 @@ import yaml
 from my_project_name.errors import ConfigError
 
 logger = logging.getLogger()
+logging.getLogger("peewee").setLevel(
+    logging.INFO
+)  # Prevent debug messages from peewee lib
 
 
 class Config(object):
@@ -99,7 +102,10 @@ class Config(object):
         self.command_prefix = self._get_cfg(["command_prefix"], default="!c") + " "
 
     def _get_cfg(
-        self, path: List[str], default: Any = None, required: bool = True,
+        self,
+        path: List[str],
+        default: Any = None,
+        required: bool = True,
     ) -> Any:
         """Get a config option from a path and option name, specifying whether it is
         required.
