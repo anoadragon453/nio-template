@@ -109,8 +109,7 @@ class Storage(object):
         #    logger.info("Database migrated to v1")
 
     def _execute(self, *args):
-        """A wrapper around cursor.execute that transforms placeholder ?'s to %s for postgres
-        """
+        """A wrapper around cursor.execute that transforms placeholder ?'s to %s for postgres"""
         if self.db_type == "postgres":
             self.cursor.execute(args[0].replace("?", "%s"), *args[1:])
         else:
