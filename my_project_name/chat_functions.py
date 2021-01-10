@@ -8,6 +8,7 @@ from nio import (
     MatrixRoom,
     MegolmEvent,
     Response,
+    RoomSendResponse,
     SendRetryError,
 )
 
@@ -21,7 +22,7 @@ async def send_text_to_room(
     notice: bool = True,
     markdown_convert: bool = True,
     reply_to_event_id: Optional[str] = None,
-):
+) -> Union[RoomSendResponse, ErrorResponse]:
     """Send text to a matrix room.
 
     Args:
@@ -39,6 +40,9 @@ async def send_text_to_room(
 
         reply_to_event_id: Whether this message is a reply to another event. The event
             ID this is message is a reply to.
+
+    Returns:
+        A RoomSendResponse if the request was successful, else an ErrorResponse.
     """
     # Determine whether to ping room members or not
     msgtype = "m.notice" if notice else "m.text"
@@ -56,7 +60,7 @@ async def send_text_to_room(
         content["m.relates_to"] = {"m.in_reply_to": {"event_id": reply_to_event_id}}
 
     try:
-        await client.room_send(
+        return await client.room_send(
             room_id,
             "m.room.message",
             content,
@@ -125,7 +129,7 @@ async def react_to_event(
     )
 
 
-async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent):
+async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent) -> None:
     """Callback for when an event fails to decrypt. Inform the user"""
     logger.error(
         f"Failed to decrypt event '{event.event_id}' in room '{room.room_id}'!"

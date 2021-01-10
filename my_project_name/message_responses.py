@@ -1,26 +1,38 @@
 import logging
 
+from nio import AsyncClient, MatrixRoom, RoomMessageText
+
 from my_project_name.chat_functions import send_text_to_room
+from my_project_name.config import Config
+from my_project_name.storage import Storage
 
 logger = logging.getLogger(__name__)
 
 
-class Message(object):
-    def __init__(self, client, store, config, message_content, room, event):
+class Message:
+    def __init__(
+        self,
+        client: AsyncClient,
+        store: Storage,
+        config: Config,
+        message_content: str,
+        room: MatrixRoom,
+        event: RoomMessageText,
+    ):
         """Initialize a new Message
 
         Args:
-            client (nio.AsyncClient): nio client used to interact with matrix
+            client: nio client used to interact with matrix
 
-            store (Storage): Bot storage
+            store: Bot storage
 
-            config (Config): Bot configuration parameters
+            config: Bot configuration parameters
 
-            message_content (str): The body of the message
+            message_content: The body of the message
 
-            room (nio.rooms.MatrixRoom): The room the event came from
+            room: The room the event came from
 
-            event (nio.events.room_events.RoomMessageText): The event defining the message
+            event: The event defining the message
         """
         self.client = client
         self.store = store
@@ -29,12 +41,12 @@ class Message(object):
         self.room = room
         self.event = event
 
-    async def process(self):
+    async def process(self) -> None:
         """Process and possibly respond to the message"""
         if self.message_content.lower() == "hello world":
             await self._hello_world()
 
-    async def _hello_world(self):
+    async def _hello_world(self) -> None:
         """Say hello"""
         text = "Hello, world!"
         await send_text_to_room(self.client, self.room.room_id, text)

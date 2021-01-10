@@ -2,7 +2,7 @@ import logging
 import os
 import re
 import sys
-from typing import Any, List
+from typing import Any, List, Optional
 
 import yaml
 
@@ -14,11 +14,11 @@ logging.getLogger("peewee").setLevel(
 )  # Prevent debug messages from peewee lib
 
 
-class Config(object):
-    def __init__(self, filepath):
+class Config:
+    def __init__(self, filepath: str):
         """
         Args:
-            filepath (str): Path to config file
+            filepath: Path to a config file
         """
         if not os.path.isfile(filepath):
             raise ConfigError(f"Config file '{filepath}' does not exist")
@@ -104,15 +104,15 @@ class Config(object):
     def _get_cfg(
         self,
         path: List[str],
-        default: Any = None,
-        required: bool = True,
+        default: Optional[Any] = None,
+        required: Optional[bool] = True,
     ) -> Any:
         """Get a config option from a path and option name, specifying whether it is
         required.
 
         Raises:
-            ConfigError: If required is specified and the object is not found
-                (and there is no default value provided), this error will be raised
+            ConfigError: If required is True and the object is not found (and there is
+                no default value provided), a ConfigError will be raised.
         """
         # Sift through the the config until we reach our option
         config = self.config
@@ -128,5 +128,5 @@ class Config(object):
                 # or return the default value
                 return default
 
-        # We found the option. Return it
+        # We found the option. Return it.
         return config

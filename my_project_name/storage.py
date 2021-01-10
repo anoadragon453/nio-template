@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict
 
 # The latest migration version of the database.
 #
@@ -12,8 +13,8 @@ latest_migration_version = 0
 logger = logging.getLogger(__name__)
 
 
-class Storage(object):
-    def __init__(self, database_config):
+class Storage:
+    def __init__(self, database_config: Dict[str, str]):
         """Setup the database
 
         Runs an initial setup or migrations depending on whether a database file has already
@@ -45,7 +46,10 @@ class Storage(object):
 
         logger.info(f"Database initialization of type '{self.db_type}' complete")
 
-    def _get_database_connection(self, database_type: str, connection_string: str):
+    def _get_database_connection(
+        self, database_type: str, connection_string: str
+    ) -> Any:
+        """Creates and returns a connection to the database"""
         if database_type == "sqlite":
             import sqlite3
 
@@ -61,7 +65,7 @@ class Storage(object):
 
             return conn
 
-    def _initial_setup(self):
+    def _initial_setup(self) -> None:
         """Initial setup of the database"""
         logger.info("Performing initial database setup...")
 
@@ -88,13 +92,13 @@ class Storage(object):
 
         logger.info("Database setup complete")
 
-    def _run_migrations(self, current_migration_version: int):
+    def _run_migrations(self, current_migration_version: int) -> None:
         """Execute database migrations. Migrates the database to the
         `latest_migration_version`
 
         Args:
             current_migration_version: The migration version that the database is
-                currently at
+                currently at.
         """
         logger.debug("Checking for necessary database migrations...")
 
@@ -108,8 +112,14 @@ class Storage(object):
         #
         #    logger.info("Database migrated to v1")
 
-    def _execute(self, *args):
-        """A wrapper around cursor.execute that transforms placeholder ?'s to %s for postgres"""
+    def _execute(self, *args) -> None:
+        """A wrapper around cursor.execute that transforms placeholder ?'s to %s for postgres.
+
+        This allows for the support of queries that are compatible with both postgres and sqlite.
+
+        Args:
+            args: Arguments passed to cursor.execute.
+        """
         if self.db_type == "postgres":
             self.cursor.execute(args[0].replace("?", "%s"), *args[1:])
         else:

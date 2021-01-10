@@ -1,37 +1,47 @@
 import logging
 
-from nio import JoinError, MatrixRoom, MegolmEvent, RoomGetEventError, UnknownEvent
+from nio import (
+    AsyncClient,
+    InviteMemberEvent,
+    JoinError,
+    MatrixRoom,
+    MegolmEvent,
+    RoomGetEventError,
+    RoomMessageText,
+    UnknownEvent,
+)
 
 from my_project_name.bot_commands import Command
 from my_project_name.chat_functions import make_pill, react_to_event, send_text_to_room
+from my_project_name.config import Config
 from my_project_name.message_responses import Message
+from my_project_name.storage import Storage
 
 logger = logging.getLogger(__name__)
 
 
-class Callbacks(object):
-    def __init__(self, client, store, config):
+class Callbacks:
+    def __init__(self, client: AsyncClient, store: Storage, config: Config):
         """
         Args:
-            client (nio.AsyncClient): nio client used to interact with matrix
+            client: nio client used to interact with matrix
 
-            store (Storage): Bot storage
+            store: Bot storage
 
-            config (Config): Bot configuration parameters
+            config: Bot configuration parameters
         """
         self.client = client
         self.store = store
         self.config = config
         self.command_prefix = config.command_prefix
 
-    async def message(self, room, event):
+    async def message(self, room: MatrixRoom, event: RoomMessageText) -> None:
         """Callback for when a message event is received
 
         Args:
-            room (nio.rooms.MatrixRoom): The room the event came from
+            room: The room the event came from
 
-            event (nio.events.room_events.RoomMessageText): The event defining the message
-
+            event: The event defining the message
         """
         # Extract the message text
         msg = event.body
@@ -67,8 +77,14 @@ class Callbacks(object):
         command = Command(self.client, self.store, self.config, msg, room, event)
         await command.process()
 
-    async def invite(self, room, event):
-        """Callback for when an invite is received. Join the room specified in the invite"""
+    async def invite(self, room: MatrixRoom, event: InviteMemberEvent) -> None:
+        """Callback for when an invite is received. Join the room specified in the invite.
+
+        Args:
+            room: The room that we are invited to.
+
+            event: The invite event.
+        """
         logger.debug(f"Got invite to {room.room_id} from {event.sender}.")
 
         # Attempt to join 3 times before giving up
@@ -90,7 +106,7 @@ class Callbacks(object):
 
     async def _reaction(
         self, room: MatrixRoom, event: UnknownEvent, reacted_to_id: str
-    ):
+    ) -> None:
         """A reaction was sent to one of our messages. Let's send a reply acknowledging it.
 
         Args:
@@ -130,8 +146,14 @@ class Callbacks(object):
             reply_to_event_id=reacted_to_id,
         )
 
-    async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent):
-        """Callback for when an event fails to decrypt. Inform the user"""
+    async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent) -> None:
+        """Callback for when an event fails to decrypt. Inform the user.
+
+        Args:
+            room: The room that the event that we were unable to decrypt is in.
+
+            event: The encrypted event that we were unable to decrypt.
+        """
         logger.error(
             f"Failed to decrypt event '{event.event_id}' in room '{room.room_id}'!"
             f"\n\n"
@@ -152,14 +174,15 @@ class Callbacks(object):
             red_x_and_lock_emoji,
         )
 
-    async def unknown(self, room: MatrixRoom, event: UnknownEvent):
+    async def unknown(self, room: MatrixRoom, event: UnknownEvent) -> None:
         """Callback for when an event with a type that is unknown to matrix-nio is received.
-        Currently this is used for reaction events, which are not specced.
+        Currently this is used for reaction events, which are not yet part of a released
+        matrix spec (and are thus unknown to nio).
 
         Args:
             room: The room the reaction was sent in.
 
-            event: The reaction event.
+            event: The event itself.
         """
         if event.type == "m.reaction":
             # Get the ID of the event this was a reaction to
@@ -168,6 +191,7 @@ class Callbacks(object):
             reacted_to = relation_dict.get("event_id")
             if reacted_to and relation_dict.get("rel_type") == "m.annotation":
                 await self._reaction(room, event, reacted_to)
+                return
 
         logger.debug(
             f"Got unknown event with type to {event.type} from {event.sender} in {room.room_id}."

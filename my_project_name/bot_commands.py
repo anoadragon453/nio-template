@@ -1,22 +1,34 @@
+from nio import AsyncClient, MatrixRoom, RoomMessageText
+
 from my_project_name.chat_functions import react_to_event, send_text_to_room
+from my_project_name.config import Config
+from my_project_name.storage import Storage
 
 
-class Command(object):
-    def __init__(self, client, store, config, command, room, event):
+class Command:
+    def __init__(
+        self,
+        client: AsyncClient,
+        store: Storage,
+        config: Config,
+        command: str,
+        room: MatrixRoom,
+        event: RoomMessageText,
+    ):
         """A command made by a user
 
         Args:
-            client (nio.AsyncClient): The client to communicate to matrix with
+            client: The client to communicate to matrix with
 
-            store (Storage): Bot storage
+            store: Bot storage
 
-            config (Config): Bot configuration parameters
+            config: Bot configuration parameters
 
-            command (str): The command and arguments
+            command: The command and arguments
 
-            room (nio.rooms.MatrixRoom): The room the command was sent in
+            room: The room the command was sent in
 
-            event (nio.events.room_events.RoomMessageText): The event describing the command
+            event: The event describing the command
         """
         self.client = client
         self.store = store
