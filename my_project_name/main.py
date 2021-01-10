@@ -24,8 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    # Read config file
+    """The first function that is run when starting the bot"""
 
+    # Read user-configured options from a config file.
     # A different config file path can be specified as the first command line argument
     if len(sys.argv) > 1:
         config_path = sys.argv[1]

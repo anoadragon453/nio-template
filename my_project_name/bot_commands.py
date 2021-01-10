@@ -15,20 +15,20 @@ class Command:
         room: MatrixRoom,
         event: RoomMessageText,
     ):
-        """A command made by a user
+        """A command made by a user.
 
         Args:
-            client: The client to communicate to matrix with
+            client: The client to communicate to matrix with.
 
-            store: Bot storage
+            store: Bot storage.
 
-            config: Bot configuration parameters
+            config: Bot configuration parameters.
 
-            command: The command and arguments
+            command: The command and arguments.
 
-            room: The room the command was sent in
+            room: The room the command was sent in.
 
-            event: The event describing the command
+            event: The event describing the command.
         """
         self.client = client
         self.store = store
@@ -82,7 +82,7 @@ class Command:
         if topic == "rules":
             text = "These are the rules!"
         elif topic == "commands":
-            text = "Available commands"
+            text = "Available commands: ..."
         else:
             text = "Unknown help topic!"
         await send_text_to_room(self.client, self.room.room_id, text)

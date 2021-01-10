@@ -22,17 +22,17 @@ class Message:
         """Initialize a new Message
 
         Args:
-            client: nio client used to interact with matrix
+            client: nio client used to interact with matrix.
 
-            store: Bot storage
+            store: Bot storage.
 
-            config: Bot configuration parameters
+            config: Bot configuration parameters.
 
-            message_content: The body of the message
+            message_content: The body of the message.
 
-            room: The room the event came from
+            room: The room the event came from.
 
-            event: The event defining the message
+            event: The event defining the message.
         """
         self.client = client
         self.store = store

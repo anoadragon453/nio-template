@@ -18,7 +18,7 @@ class Config:
     def __init__(self, filepath: str):
         """
         Args:
-            filepath: Path to a config file
+            filepath: Path to a config file.
         """
         if not os.path.isfile(filepath):
             raise ConfigError(f"Config file '{filepath}' does not exist")

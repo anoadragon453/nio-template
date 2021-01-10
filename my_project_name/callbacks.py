@@ -24,11 +24,11 @@ class Callbacks:
     def __init__(self, client: AsyncClient, store: Storage, config: Config):
         """
         Args:
-            client: nio client used to interact with matrix
+            client: nio client used to interact with matrix.
 
-            store: Bot storage
+            store: Bot storage.
 
-            config: Bot configuration parameters
+            config: Bot configuration parameters.
         """
         self.client = client
         self.store = store
@@ -39,9 +39,9 @@ class Callbacks:
         """Callback for when a message event is received
 
         Args:
-            room: The room the event came from
+            room: The room the event came from.
 
-            event: The event defining the message
+            event: The event defining the message.
         """
         # Extract the message text
         msg = event.body

@@ -15,16 +15,16 @@ logger = logging.getLogger(__name__)
 
 class Storage:
     def __init__(self, database_config: Dict[str, str]):
-        """Setup the database
+        """Setup the database.
 
         Runs an initial setup or migrations depending on whether a database file has already
-        been created
+        been created.
 
         Args:
             database_config: a dictionary containing the following keys:
-                * type: A string, one of "sqlite" or "postgres"
+                * type: A string, one of "sqlite" or "postgres".
                 * connection_string: A string, featuring a connection string that
-                    be fed to each respective db library's `connect` method
+                    be fed to each respective db library's `connect` method.
         """
         self.conn = self._get_database_connection(
             database_config["type"], database_config["connection_string"]
@@ -94,7 +94,7 @@ class Storage:
 
     def _run_migrations(self, current_migration_version: int) -> None:
         """Execute database migrations. Migrates the database to the
-        `latest_migration_version`
+        `latest_migration_version`.
 
         Args:
             current_migration_version: The migration version that the database is
