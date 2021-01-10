@@ -2,7 +2,14 @@ import logging
 from typing import Optional, Union
 
 from markdown import markdown
-from nio import AsyncClient, ErrorResponse, Response, SendRetryError
+from nio import (
+    AsyncClient,
+    ErrorResponse,
+    MatrixRoom,
+    MegolmEvent,
+    Response,
+    SendRetryError,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -115,4 +122,29 @@ async def react_to_event(
         "m.reaction",
         content,
         ignore_unverified_devices=True,
+    )
+
+
+async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent):
+    """Callback for when an event fails to decrypt. Inform the user"""
+    logger.error(
+        f"Failed to decrypt event '{event.event_id}' in room '{room.room_id}'!"
+        f"\n\n"
+        f"Tip: try using a different device ID in your config file and restart."
+        f"\n\n"
+        f"If all else fails, delete your store directory and let the bot recreate "
+        f"it (your reminders will NOT be deleted, but the bot may respond to existing "
+        f"commands a second time)."
+    )
+
+    user_msg = (
+        "Unable to decrypt this message. "
+        "Check whether you've chosen to only encrypt to trusted devices."
+    )
+
+    await send_text_to_room(
+        self.client,
+        room.room_id,
+        user_msg,
+        reply_to_event_id=event.event_id,
     )

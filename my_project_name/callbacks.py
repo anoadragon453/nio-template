@@ -1,9 +1,9 @@
 import logging
 
-from nio import JoinError, MatrixRoom, RoomGetEventError, UnknownEvent
+from nio import JoinError, MatrixRoom, MegolmEvent, RoomGetEventError, UnknownEvent
 
 from my_project_name.bot_commands import Command
-from my_project_name.chat_functions import make_pill, send_text_to_room
+from my_project_name.chat_functions import make_pill, react_to_event, send_text_to_room
 from my_project_name.message_responses import Message
 
 logger = logging.getLogger(__name__)
@@ -128,6 +128,28 @@ class Callbacks(object):
             room.room_id,
             message,
             reply_to_event_id=reacted_to_id,
+        )
+
+    async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent):
+        """Callback for when an event fails to decrypt. Inform the user"""
+        logger.error(
+            f"Failed to decrypt event '{event.event_id}' in room '{room.room_id}'!"
+            f"\n\n"
+            f"Tip: try using a different device ID in your config file and restart."
+            f"\n\n"
+            f"If all else fails, delete your store directory and let the bot recreate "
+            f"it (your reminders will NOT be deleted, but the bot may respond to existing "
+            f"commands a second time)."
+        )
+
+        red_x_and_lock_emoji = "❌ 🔐"
+
+        # React to the undecryptable event with some emoji
+        await react_to_event(
+            self.client,
+            room.room_id,
+            event.event_id,
+            red_x_and_lock_emoji,
         )
 
     async def unknown(self, room: MatrixRoom, event: UnknownEvent):
