@@ -1,0 +1,57 @@
+# This workflow will install Python dependencies, then run unit testing across the earliest and latest supported Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Run unit tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  python_36:
+
+    # We need to use 20.04 to get access to the libolm3 package
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Install project dependencies
+        run: |
+          # Install libolm, required for end-to-end encryption functionality
+          sudo apt install -y libolm-dev libolm3
+          # Install python dependencies
+          python setup.py install
+
+      - name: Run unit tests
+        run: |
+          python -m unittest
+
+  python_39:
+
+    # We need to use 20.04 to get access to the libolm3 package
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install project dependencies
+      run: |
+        # Install libolm, required for end-to-end encryption functionality
+        sudo apt install -y libolm-dev libolm3
+        # Install python dependencies
+        python setup.py install
+
+    - name: Run unit tests
+      run: |
+        python -m unittest
