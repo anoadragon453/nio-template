@@ -28,7 +28,7 @@ jobs:
 
     - name: Check import statement sorting
       run: |
-        isort -c --df my_project_name/ my-project-name
+        isort -c --df my_project_name/ my-project-name tests
 
     - name: Python syntax errors, undefined names, etc.
       run: |
@@ -36,4 +36,4 @@ jobs:
 
     - name: PEP8 formatting
       run: |
-        black --check --diff my_project_name/ my-project-name
+        black --check --diff my_project_name/ my-project-name tests
