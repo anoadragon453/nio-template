@@ -23,21 +23,27 @@ else
     exit 1
 fi
 
-PLACEHOLDER_DASHES=$(echo $PLACEHOLDER | sed 's/ /-/g')
-PLACEHOLDER_UNDERSCORES=$(echo $PLACEHOLDER | sed 's/ /_/g')
+PLACEHOLDER_DASHES="${PLACEHOLDER// /-}"
+PLACEHOLDER_UNDERSCORES="${PLACEHOLDER// /_}"
 
-REPLACEMENT_DASHES=$(echo $REPLACEMENT | sed 's/ /-/g')
-REPLACEMENT_UNDERSCORES=$(echo $REPLACEMENT | sed 's/ /_/g')
+REPLACEMENT_DASHES="${REPLACEMENT// /-}"
+REPLACEMENT_UNDERSCORES="${REPLACEMENT// /_}"
 
 echo "Updating file and folder names..."
 
-regex-rename --rename "(.*)$PLACEHOLDER_DASHES(.*)" "\1$REPLACEMENT_DASHES\2" > /dev/null
-regex-rename --rename "(.*)$PLACEHOLDER_UNDERSCORES(.*)" "\1$REPLACEMENT_UNDERSCORES\2" > /dev/null
+# Iterate over all directories (besides venv's and .git) and rename files/folders
+# Yes this looks like some crazy voodoo, but it's necessary as regex-rename does
+# not provide any sort of recursive functionality...
+find . -type d -not -path "./env*" -not -path "./.git" -not -path "./.git*" \
+  -exec sh -c "cd {} && \
+    regex-rename --rename \"(.*)$PLACEHOLDER_DASHES(.*)\" \"\1$REPLACEMENT_DASHES\2\" && \
+    regex-rename --rename \"(.*)$PLACEHOLDER_UNDERSCORES(.*)\" \"\1$REPLACEMENT_UNDERSCORES\2\"" \; > /dev/null
 
 echo "Updating references within files..."
 
 # Iterate through each file and replace strings within files
-for file in $(grep --exclude-dir=env --exclude-dir=venv -lEw "$PLACEHOLDER_DASHES|$PLACEHOLDER_UNDERSCORES" -R *); do
+for file in $(grep --exclude-dir=env --exclude-dir=venv --exclude-dir=.git -lEw "$PLACEHOLDER_DASHES|$PLACEHOLDER_UNDERSCORES" -R * .[^.]*); do
+    echo "Checking $file"
     if [[ $file != $(basename "$0") ]]; then
         sed -i "s/$PLACEHOLDER_DASHES/$REPLACEMENT_DASHES/g" $file
         sed -i "s/$PLACEHOLDER_UNDERSCORES/$REPLACEMENT_UNDERSCORES/g" $file
