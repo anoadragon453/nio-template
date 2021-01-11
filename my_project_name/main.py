@@ -32,6 +32,8 @@ async def main():
         config_path = sys.argv[1]
     else:
         config_path = "config.yaml"
+
+    # Read the parsed config file and create a Config object
     config = Config(config_path)
 
     # Configure the database

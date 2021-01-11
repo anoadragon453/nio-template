@@ -15,18 +15,22 @@ logging.getLogger("peewee").setLevel(
 
 
 class Config:
+    """Creates a Config object from a YAML-encoded config file from a given filepath"""
+
     def __init__(self, filepath: str):
-        """
-        Args:
-            filepath: Path to a config file.
-        """
+        self.filepath = filepath
         if not os.path.isfile(filepath):
             raise ConfigError(f"Config file '{filepath}' does not exist")
 
         # Load in the config file at the given filepath
         with open(filepath) as file_stream:
-            self.config = yaml.safe_load(file_stream.read())
+            self.config_dict = yaml.safe_load(file_stream.read())
 
+        # Parse and validate config options
+        self._parse_config_values()
+
+    def _parse_config_values(self):
+        """Read and validate each config option"""
         # Logging setup
         formatter = logging.Formatter(
             "%(asctime)s | %(name)s [%(levelname)s] %(message)s"
@@ -115,7 +119,7 @@ class Config:
                 no default value provided), a ConfigError will be raised.
         """
         # Sift through the the config until we reach our option
-        config = self.config
+        config = self.config_dict
         for name in path:
             config = config.get(name)
 
