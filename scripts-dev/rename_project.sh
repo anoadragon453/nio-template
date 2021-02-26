@@ -7,6 +7,11 @@ then
     exit 1
 fi
 
+# GNU sed and BSD(Mac) sed handle -i differently :(
+function is_gnu_sed(){
+    sed --version >/dev/null 2>&1
+}
+
 # Allow specifying either:
 # * One argument, which is the new project name, assuming the old project name is "my project name"
 # * Or two arguments, where one can specify 1. the old project name and 2. the new project name
@@ -42,11 +47,16 @@ find . -type d -not -path "./env*" -not -path "./.git" -not -path "./.git*" \
 echo "Updating references within files..."
 
 # Iterate through each file and replace strings within files
-for file in $(grep --exclude-dir=env --exclude-dir=venv --exclude-dir=.git -lEw "$PLACEHOLDER_DASHES|$PLACEHOLDER_UNDERSCORES" -R * .[^.]*); do
+for file in $(grep --exclude-dir=env --exclude-dir=venv --exclude-dir=.git --exclude *.pyc -lEw "$PLACEHOLDER_DASHES|$PLACEHOLDER_UNDERSCORES" -R * .[^.]*); do
     echo "Checking $file"
     if [[ $file != $(basename "$0") ]]; then
-        sed -i "s/$PLACEHOLDER_DASHES/$REPLACEMENT_DASHES/g" $file
-        sed -i "s/$PLACEHOLDER_UNDERSCORES/$REPLACEMENT_UNDERSCORES/g" $file
+        if is_gnu_sed; then
+            sed -i "s/$PLACEHOLDER_DASHES/$REPLACEMENT_DASHES/g" $file
+            sed -i "s/$PLACEHOLDER_UNDERSCORES/$REPLACEMENT_UNDERSCORES/g" $file
+        else
+            sed -i "" "s/$PLACEHOLDER_DASHES/$REPLACEMENT_DASHES/g" $file
+            sed -i "" "s/$PLACEHOLDER_UNDERSCORES/$REPLACEMENT_UNDERSCORES/g" $file
+        fi
         echo " - $file"
     fi
 done
