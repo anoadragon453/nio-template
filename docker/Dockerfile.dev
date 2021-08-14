@@ -55,7 +55,7 @@ RUN apk add --no-cache \
 # such that these dependencies can be cached
 RUN mkdir -p /src/my_project_name
 COPY my_project_name/__init__.py /src/my_project_name/
-COPY README.md my-project-name /src/
+COPY README.md my-project-namectl /src/
 COPY setup.py /src/setup.py
 RUN pip install -e "/src/.[postgres]"
 
@@ -68,4 +68,4 @@ COPY *.py /src/
 VOLUME ["/data"]
 
 # Start the app
-ENTRYPOINT ["my-project-name", "/data/config.yaml"]
+ENTRYPOINT ["my-project-namectl", "/data/config.yaml"]
