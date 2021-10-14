@@ -11,6 +11,7 @@ from nio import (
     InviteMemberEvent,
     LocalProtocolError,
     LoginError,
+    MatrixRoom,
     MegolmEvent,
     RoomMessageText,
     UnknownEvent,
@@ -63,7 +64,21 @@ async def main():
     # Set up event callbacks
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
-    client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
+
+    def invite_event_filtered_callback(
+        room: MatrixRoom, event: InviteMemberEvent
+    ) -> None:
+        """
+        Since the InviteMemberEvent is fired for every m.room.member state received
+        in a sync response's `rooms.invite` section, we will receive some that are
+        not actually our own invite event.
+        This makes sure we only call `callbacks.invite` with our own invite events.
+        """
+        if event.state_key == client.user_id:
+            # This is not our own membership (invite) event
+            callbacks.invite(room, event)
+
+    client.add_event_callback(invite_event_filtered_callback, (InviteMemberEvent,))
     client.add_event_callback(callbacks.decryption_failure, (MegolmEvent,))
     client.add_event_callback(callbacks.unknown, (UnknownEvent,))
 
