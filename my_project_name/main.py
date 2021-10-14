@@ -71,11 +71,11 @@ async def main():
         """
         Since the InviteMemberEvent is fired for every m.room.member state received
         in a sync response's `rooms.invite` section, we will receive some that are
-        not actually our own invite event.
+        not actually our own invite event (such as the inviter's membership).
         This makes sure we only call `callbacks.invite` with our own invite events.
         """
         if event.state_key == client.user_id:
-            # This is not our own membership (invite) event
+            # This is our own membership (invite) event
             callbacks.invite(room, event)
 
     client.add_event_callback(invite_event_filtered_callback, (InviteMemberEvent,))
