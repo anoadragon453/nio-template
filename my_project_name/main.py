@@ -65,7 +65,7 @@ async def main():
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
 
-    def invite_event_filtered_callback(
+    async def invite_event_filtered_callback(
         room: MatrixRoom, event: InviteMemberEvent
     ) -> None:
         """
@@ -76,7 +76,7 @@ async def main():
         """
         if event.state_key == client.user_id:
             # This is our own membership (invite) event
-            callbacks.invite(room, event)
+            await callbacks.invite(room, event)
 
     client.add_event_callback(invite_event_filtered_callback, (InviteMemberEvent,))
     client.add_event_callback(callbacks.decryption_failure, (MegolmEvent,))
