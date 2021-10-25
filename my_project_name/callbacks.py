@@ -104,6 +104,19 @@ class Callbacks:
         # Successfully joined room
         logger.info(f"Joined {room.room_id}")
 
+    async def invite_event_filtered_callback(
+        self, room: MatrixRoom, event: InviteMemberEvent
+    ) -> None:
+        """
+        Since the InviteMemberEvent is fired for every m.room.member state received
+        in a sync response's `rooms.invite` section, we will receive some that are
+        not actually our own invite event (such as the inviter's membership).
+        This makes sure we only call `callbacks.invite` with our own invite events.
+        """
+        if event.state_key == self.client.user_id:
+            # This is our own membership (invite) event
+            await self.invite(room, event)
+
     async def _reaction(
         self, room: MatrixRoom, event: UnknownEvent, reacted_to_id: str
     ) -> None:
