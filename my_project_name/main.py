@@ -126,6 +126,10 @@ async def main():
             # Sleep so we don't bombard the server with login requests
             sleep(15)
         except asyncio.TimeoutError:
+            # Syncing with the homeserver may time out occasionally if:
+            #   1. There are no new events to sync in the timeout period.
+            #   2. The server is taking a long time to respond to the request
+            #  In both of these cases, let's just try again.
             logger.debug("Timed out while syncing with homeserver.")
         finally:
             # Make sure to close the client connection on disconnect
