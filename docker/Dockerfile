@@ -23,7 +23,7 @@
 # then transfer those dependencies to the container we're going to ship,
 # before throwing this one away
 ARG PYTHON_VERSION=3.8
-FROM docker.io/python:${PYTHON_VERSION}-alpine3.11 as builder
+FROM docker.io/python:${PYTHON_VERSION}-alpine as builder
 
 ##
 ## Build libolm for matrix-nio e2e support
@@ -79,7 +79,7 @@ RUN pip install --prefix="/python-libs" --no-warn-script-location "/src/.[postgr
 
 # Create the container we'll actually ship. We need to copy libolm and any
 # python dependencies that we built above to this container
-FROM docker.io/python:${PYTHON_VERSION}-alpine3.11
+FROM docker.io/python:${PYTHON_VERSION}-alpine
 
 # Copy python dependencies from the "builder" container
 COPY --from=builder /python-libs /usr/local

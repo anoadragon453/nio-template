@@ -22,7 +22,7 @@
 #
 
 ARG PYTHON_VERSION=3.8
-FROM docker.io/python:${PYTHON_VERSION}-alpine3.11
+FROM docker.io/python:${PYTHON_VERSION}-alpine
 
 ##
 ## Build libolm for matrix-nio e2e support
