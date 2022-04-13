@@ -55,5 +55,5 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     # Allow the user to run the bot with `my-project-name ...`
-    scripts=["my-project-name"],
+    scripts=["my-project-namectl"],
 )

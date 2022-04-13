@@ -60,7 +60,7 @@ RUN apk add --no-cache \
 # This speeds up subsequent image builds when the source code is changed
 RUN mkdir -p /src/my_project_name
 COPY my_project_name/__init__.py /src/my_project_name/
-COPY README.md my-project-name /src/
+COPY README.md my-project-namectl /src/
 
 # Build the dependencies
 COPY setup.py /src/setup.py
@@ -98,4 +98,4 @@ RUN apk add --no-cache \
 VOLUME ["/data"]
 
 # Start the bot
-ENTRYPOINT ["my-project-name", "/data/config.yaml"]
+ENTRYPOINT ["my-project-namectl", "/data/config.yaml"]
