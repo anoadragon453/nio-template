@@ -88,6 +88,25 @@ class Storage:
             (0,),
         )
 
+        # Set up the improperly sent message table
+        self._execute(
+            """
+            CREATE TABLE fails (
+                user_id TEXT NOT NULL,
+                room_id TEXT NOT NULL,
+                attempts INTEGER DEFAULT 0
+            )
+            """
+        )
+
+        # Create a unique index on room_id, user_id
+        self._execute(
+            """
+            CREATE UNIQUE INDEX fail_id
+            ON fails(user_id, room_id)
+        """
+        )
+
         # Set up any other necessary database tables here
 
         logger.info("Database setup complete")
@@ -124,3 +143,53 @@ class Storage:
             self.cursor.execute(args[0].replace("?", "%s"), *args[1:])
         else:
             self.cursor.execute(*args)
+
+    def update_or_create_fail(self, user_id, room_id):
+        """Create a new fail entry, or increment an existing one"""
+        logger.debug(f"Creating new/incrementing attempts for {user_id} in room {room_id}")
+        self._execute(
+            """
+            INSERT INTO fails (
+                user_id,
+                room_id,
+                attempts
+            ) VALUES(
+                ?, ?, 1
+            )
+            ON CONFLICT (user_id, room_id) DO
+            UPDATE SET attempts = attempts + 1
+        """,
+            (
+                user_id,
+                room_id,
+            ),
+        )
+#WHERE room_id = ? AND user_id = ?
+    def delete_fail(self, user_id: str, room_id: str):
+        """Delete a fail entry via its user and room ids"""
+        self._execute(
+            """
+            DELETE FROM fails WHERE room_id = ? AND user_id = ?
+        """,
+            (room_id, user_id),
+        )
+    def get_fail(self, user_id, room_id):
+        """ Get the number of fails for a user in a group"""
+
+        self._execute(
+            """
+            SELECT attempts from fails 
+            WHERE room_id = ? AND user_id = ?
+        """,
+            (
+                room_id,
+                user_id,
+            ),
+        )
+
+        row = self.cursor.fetchall()
+        if len(row) != 0:
+            logger.debug(f"Found failed attempts for {user_id} in room {room_id}: {row[0][0]}")
+            return row[0][0]
+        logger.debug(f"First failed attempt for {user_id} in room {room_id}")
+        return 0
