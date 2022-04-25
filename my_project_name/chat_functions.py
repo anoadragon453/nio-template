@@ -10,6 +10,9 @@ from nio import (
     Response,
     RoomSendResponse,
     SendRetryError,
+    RoomPreset,
+    RoomVisibility,
+    RoomCreateError,
 )
 
 logger = logging.getLogger(__name__)
@@ -152,3 +155,39 @@ async def decryption_failure(self, room: MatrixRoom, event: MegolmEvent) -> None
         user_msg,
         reply_to_event_id=event.event_id,
     )
+
+async def send_msg(client: AsyncClient, mxid: str, roomname: str, message: str):
+    """
+    :param mxid: A Matrix user id to send the message to
+    :param roomname: A Matrix room id to send the message to
+    :param message: Text to be sent as message
+    :return bool: Success upon sending the message
+    """
+    # Sends private message to user. Returns true on success.
+    msg_room = await find_or_create_private_msg(client, mxid, roomname)
+    if not msg_room or (type(msg_room) is RoomCreateError):
+        logger.error(f'Unable to create room when trying to message {mxid}')
+        return False
+    # Send message to the room
+    await send_text_to_room(client, msg_room.room_id, message)
+    return True
+
+async def find_or_create_private_msg(client: AsyncClient, mxid: str, roomname: str):
+    # Find if we already have a common room with user:
+    msg_room = None
+    for croomid in client.rooms:
+        roomobj = client.rooms[croomid]
+        if len(roomobj.users) == 2:
+            for user in roomobj.users:
+                if user == mxid:
+                    msg_room = roomobj
+    # Nope, let's create one
+    if not msg_room:
+        msg_room = await client.room_create(visibility=RoomVisibility.private,
+            name=roomname,
+            is_direct=True,
+            preset=RoomPreset.private_chat,
+            invite={mxid},
+        )
+    return msg_room
+
