@@ -46,6 +46,10 @@ class Callbacks:
         # Extract the message text
         msg = event.body
 
+        # Extract flag if the message is in a thread
+        is_thread_reply = event.source["content"].get("m.relates_to",{}).get('rel_type',False) == 'm.thread'
+        logger.debug(f"Message from Thread? | {is_thread_reply}")
+
         # Ignore messages from ourselves
         if event.sender == self.client.user:
             return
@@ -62,11 +66,10 @@ class Callbacks:
         # room.is_group does not allow room aliases
         # room.member_count > 2 ... we assume a public room
         # room.member_count <= 2 ... we assume a DM
-        if not has_command_prefix and room.member_count > 2:
-            # General message listener
-            message = Message(self.client, self.store, self.config, msg, room, event)
-            await message.process()
-            return
+        if not has_command_prefix and room.member_count > 2 and not is_thread_reply:
+            # Call the filter method on a message in a channel that not a thread discussion and does not contain the prefix (! REMOVE PREFIXES ENTIRELLY !)
+            command = Command(self.client, self.store, self.config, msg, room, event)
+            return await command.filter_channel()
 
         # Otherwise if this is in a 1-1 with the bot or features a command prefix,
         # treat it as a command
