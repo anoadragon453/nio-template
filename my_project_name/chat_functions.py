@@ -49,11 +49,11 @@ async def send_text_to_room(
 
     content = {
         "msgtype": msgtype,
-        "format": "org.matrix.custom.html",
         "body": message,
     }
 
     if markdown_convert:
+        content["format"] = "org.matrix.custom.html"
         content["formatted_body"] = markdown(message)
 
     if reply_to_event_id:
