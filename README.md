@@ -33,6 +33,7 @@ an admin tool to maintain your Matrix installation or server
 * [elokapina/bubo](https://github.com/elokapina/bubo) - Matrix bot to help with community management
 * [elokapina/middleman](https://github.com/elokapina/middleman) - Matrix bot to act as a middleman, for example as a support bot
 * [chc4/matrix-pinbot](https://github.com/chc4/matrix-pinbot) - Matrix bot for pinning messages to a dedicated channel
+* [murlock1000/nio-channel-bot](https://github.com/murlock1000/nio-channel-bot) - Matrix bot for redacting non-thread messages, creating DM rooms and sending messages to them asynchronously.
 
 Want your project listed here? [Edit this
 page!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
