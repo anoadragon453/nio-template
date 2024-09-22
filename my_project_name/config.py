@@ -65,10 +65,10 @@ class Config:
         if not os.path.isdir(self.store_path):
             if not os.path.exists(self.store_path):
                 os.mkdir(self.store_path)
-            else:
-                raise ConfigError(
-                    f"storage.store_path '{self.store_path}' is not a directory"
-                )
+        else:
+            raise ConfigError(
+                f"storage.store_path '{self.store_path}' is not a directory"
+            )
 
         # Database setup
         database_path = self._get_cfg(["storage", "database"], required=True)
