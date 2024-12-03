@@ -1,3 +1,17 @@
+# Archive Notice
+
+**Thank you to everyone for using this software! It is no longer maintained.**
+
+However, there are many good alternatives out there for creating Matrix bots. In Python:
+
+* [matrix-nio](https://github.com/matrix-nio/matrix-nio) - The library this template is based on.
+* [mautrix-python](https://github.com/mautrix/python) - Another low-level(ish) python matrix library.
+    * [maubot](https://github.com/maubot/maubot) - A plugin-based bot framework that handles most of the boilerplate for you. You just write simple plugins.
+
+for even more options, see <https://matrix.org/ecosystem/sdks/>. Happy hacking!
+
+---
+
 # Nio Template [![Built with matrix-nio](https://img.shields.io/badge/built%20with-matrix--nio-brightgreen)](https://github.com/poljar/matrix-nio) <a href="https://matrix.to/#/#nio-template:matrix.org"><img src="https://img.shields.io/matrix/nio-template:matrix.org?color=blue&label=Join%20the%20Matrix%20Room&server_fqdn=matrix-client.matrix.org" /></a>
 
 A template for creating bots with
